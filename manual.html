@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Manual Interactivo — EV Ops (Protocolo Sinapsis) | Activa Consultores</title>
+  <style>
+    :root {
+      --bg:#0b1220; --panel:#0f1a33; --card:#111f3d; --text:#e8eefc; --muted:#a8b3cf;
+      --blue:#1f6feb; --orange:#ff7a1a; --line:rgba(255,255,255,.10);
+      --ok:#30d158; --warn:#ffd60a;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text);}
+    a{color:inherit}
+    .layout{display:grid;grid-template-columns:320px 1fr;min-height:100vh}
+    .side{position:sticky;top:0;align-self:start;height:100vh;overflow:auto;background:linear-gradient(180deg,var(--panel),#0b142a);border-right:1px solid var(--line);padding:18px 16px}
+    .brand{display:flex;align-items:baseline;gap:6px;margin-bottom:14px}
+    .brand .a{color:var(--blue);font-weight:900;font-size:20px;letter-spacing:.2px}
+    .brand .c{color:var(--orange);font-weight:900;font-size:20px;letter-spacing:.2px}
+    .subtitle{color:var(--muted);font-size:12px;margin-top:2px}
+    .nav{margin-top:14px;display:flex;flex-direction:column;gap:6px}
+    .nav button{text-align:left;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text);
+      padding:10px 10px;border-radius:12px;cursor:pointer}
+    .nav button.active{border-color:rgba(31,111,235,.55);background:rgba(31,111,235,.12)}
+    .pill{display:inline-flex;align-items:center;gap:8px;font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--muted)}
+    .main{padding:22px 22px 40px 22px;max-width:1100px}
+    .h1{font-size:24px;font-weight:900;margin:0 0 6px 0}
+    .lead{color:var(--muted);margin:0 0 18px 0;line-height:1.45}
+    .grid{display:grid;grid-template-columns:1fr;gap:12px}
+    .card{border:1px solid var(--line);background:rgba(255,255,255,.03);border-radius:16px;padding:14px 14px}
+    .card h2{margin:0 0 8px 0;font-size:16px}
+    .card p{margin:0;color:var(--muted);line-height:1.45}
+    .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:10px}
+    .btn{border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--text);
+      padding:10px 12px;border-radius:12px;cursor:pointer;font-weight:700}
+    .btn.primary{border-color:rgba(31,111,235,.55);background:rgba(31,111,235,.18)}
+    .btn.orange{border-color:rgba(255,122,26,.55);background:rgba(255,122,26,.14)}
+    .small{font-size:12px;color:var(--muted)}
+    .klist{display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px}
+    .k{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:14px;border:1px solid var(--line);background:rgba(0,0,0,.12)}
+    .dot{width:10px;height:10px;border-radius:99px;background:var(--warn);margin-top:4px;flex:0 0 10px}
+    .dot.ok{background:var(--ok)}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:12px;color:#cfe0ff}
+    .iframeWrap{margin-top:12px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#000}
+    iframe{width:100%;height:560px;border:0}
+    .foot{margin-top:16px;color:var(--muted);font-size:12px}
+    @media (max-width: 980px){.layout{grid-template-columns:1fr}.side{position:relative;height:auto}}
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="side">
+      <div class="brand" aria-label="Activa Consultores">
+        <div class="a">Activa</div><div class="c">Consultores</div>
+      </div>
+      <div class="subtitle">Manual interactivo · EV Ops (Protocolo Sinapsis)</div>
+
+      <div class="row" style="margin-top:12px">
+        <span class="pill">⚡ Demo: <span class="mono" id="demoName">protocolo-sinapsis-v0_9_1-EVOPS-SCL20-DEMO.html</span></span>
+      </div>
+
+      <nav class="nav" id="nav">
+        <button data-section="inicio" class="active">1) Inicio rápido (90 s)</button>
+        <button data-section="recorrido">2) Recorrido guiado (7 min)</button>
+        <button data-section="evops">3) EV Ops: qué mirar</button>
+        <button data-section="tickets">4) Tickets y seguimiento</button>
+        <button data-section="kpi">5) KPIs clave</button>
+        <button data-section="checklist">6) Checklist pre-reunión</button>
+        <button data-section="hosting">7) Publicación en URL (gratis)</button>
+        <button data-section="faq">8) Preguntas típicas</button>
+      </nav>
+
+      <div class="foot">
+        Tip: si abres esto como archivo y el iframe no carga, usa servidor local:<br/>
+        <span class="mono">python3 -m http.server 8000</span> y abre <span class="mono">http://localhost:8000</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <h1 class="h1">Manual Interactivo — EV Ops (Santiago 20)</h1>
+      <p class="lead">
+        Este manual está pensado para que la demo salga impecable en reunión: qué hacer, qué mostrar y qué decir.
+        Todo es <b>SIMULATED</b> (sin datos sensibles).
+      </p>
+
+      <div class="card">
+        <h2>Panel de control</h2>
+        <div class="row">
+          <button class="btn primary" id="openDemo">Abrir demo en nueva pestaña</button>
+          <button class="btn orange" id="toggleEmbed">Ver/Ocultar demo aquí</button>
+          <button class="btn" id="runChecks">Ejecutar checklist rápido</button>
+        </div>
+        <div class="small" id="status" style="margin-top:8px">Estado: listo.</div>
+
+        <div class="iframeWrap" id="embedWrap" style="display:none">
+          <iframe id="demoFrame" title="Demo EV Ops"></iframe>
+        </div>
+      </div>
+
+      <section id="inicio" class="grid" style="margin-top:12px">
+        <div class="card">
+          <h2>1) Inicio rápido (90 s)</h2>
+          <p><b>Objetivo:</b> entrar a EV Ops, simular cambios y crear 1 ticket.</p>
+          <div class="klist">
+            <div class="k"><span class="dot ok"></span><div><b>Abrir</b> la demo y entrar a <b>⚡ EV Ops Carga</b>.</div></div>
+            <div class="k"><span class="dot ok"></span><div>Activar <b>Auto</b> (si existe) o apretar <b>Simular actualización</b> 2 veces.</div></div>
+            <div class="k"><span class="dot ok"></span><div>Seleccionar una estación “offline / cola alta” y <b>Crear ticket</b>.</div></div>
+            <div class="k"><span class="dot ok"></span><div>Ir a <b>Proyectos</b> y mostrar el ticket creado con estado.</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="recorrido" class="grid" style="margin-top:12px">
+        <div class="card">
+          <h2>2) Recorrido guiado (7 min) — guion sugerido</h2>
+          <p><b>0:00–1:00</b> “Hoy el nudo son puntos ciegos en carga. Sinapsis convierte operación en decisiones con trazabilidad.”</p>
+          <p style="margin-top:8px"><b>1:00–3:00</b> Mostrar EV Ops: estados, cola, disponibilidad, “casi tiempo real” (simulación).</p>
+          <p style="margin-top:8px"><b>3:00–5:00</b> KPI: uptime, disponibilidad, fuera de servicio, cola total + tendencia.</p>
+          <p style="margin-top:8px"><b>5:00–6:30</b> Ticket 1‑clic: incidente → responsable → evidencia → cierre (adiós Excel).</p>
+          <p style="margin-top:8px"><b>6:30–7:00</b> Cierre: “Piloto 4 semanas: 20 puntos → 50 reales con datos Enel + coaching de adopción.”</p>
+        </div>
+      </section>
+
+      <section id="evops" class="grid" style="margin-top:12px">
+        <div class="card">
+          <h2>3) EV Ops: qué mirar (y por qué importa)</h2>
+          <div class="klist">
+            <div class="k"><span class="dot ok"></span><div><b>Disponibilidad</b>: libre/ocupado/offline/cola.<div class="small">Ejemplo: “Si está offline, no es marketing: es operación”.</div></div></div>
+            <div class="k"><span class="dot ok"></span><div><b>Dinámica</b>: cambios por minuto/turno.<div class="small">Ejemplo: simular 2 updates y mostrar que el sistema “respira”.</div></div></div>
+            <div class="k"><span class="dot ok"></span><div><b>Prioridad</b>: dónde actuar primero.<div class="small">Ejemplo: “cola alta + comuna clave” → ticket inmediato.</div></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tickets" class="grid" style="margin-top:12px">
+        <div class="card">
+          <h2>4) Tickets y seguimiento (anti‑Excel)</h2>
+          <p>La promesa no es “más datos”: es <b>acciones trazables</b> (responsable, fecha, evidencia, cierre).</p>
+          <div class="klist">
+            <div class="k"><span class="dot ok"></span><div><b>Crear ticket</b> desde EV Ops.<div class="small">Ejemplo: “Estación X: offline” → tarea “verificar energía / reset / visita”.</div></div></div>
+            <div class="k"><span class="dot ok"></span><div><b>Estados</b> (pendiente/en curso/resuelto).<div class="small">Ejemplo: en Q&A, mostrar el cambio de estado en vivo.</div></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="kpi" class="grid" style="margin-top:12px">
+        <div class="card">
+          <h2>5) KPIs clave (para directorio)</h2>
+          <div class="klist">
+            <div class="k"><span class="dot ok"></span><div><b>Uptime</b>: % del tiempo disponible.<div class="small">Ejemplo: meta piloto: +X puntos vs baseline.</div></div></div>
+            <div class="k"><span class="dot ok"></span><div><b>Ocupación / cola</b>: presión de demanda por zona.<div class="small">Ejemplo: detectar horas punta para comunicación y re‑balance.</div></div></div>
+            <div class="k"><span class="dot ok"></span><div><b>SLA de incidentes</b>: tiempo a resolución.<div class="small">Ejemplo: “80% resuelto &lt; 24h” y evidencia.</div></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="checklist" class="grid" style="margin-top:12px">
+        <div class="card">
+          <h2>6) Checklist pre‑reunión (2 min)</h2>
+          <div class="klist" id="checks">
+            <div class="k"><span class="dot" id="chk1"></span><div><b>Internet OK</b> (CDNs cargan React/Chart/jsPDF).<div class="small">Ejemplo: abre una vez antes para cachear.</div></div></div>
+            <div class="k"><span class="dot" id="chk2"></span><div><b>EV Ops visible</b> y responde a “Simular”.<div class="small">Ejemplo: 2 updates seguidos sin recargar.</div></div></div>
+            <div class="k"><span class="dot" id="chk3"></span><div><b>Crear ticket</b> funciona y aparece en Proyectos.<div class="small">Ejemplo: ticket “Offline” con responsable.</div></div></div>
+            <div class="k"><span class="dot" id="chk4"></span><div><b>Export/Import</b> JSON listo (por si cambias de máquina).<div class="small">Ejemplo: exporta, recarga, importa.</div></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="hosting" class="grid" style="margin-top:12px">
+        <div class="card">
+          <h2>7) Publicación en URL (gratis, 3 minutos)</h2>
+          <p><b>Opción A — Netlify Drop:</b> crea cuenta → arrastra una carpeta con <span class="mono">manual</span> + <span class="mono">demo</span> → te entrega URL.</p>
+          <p style="margin-top:8px"><b>Opción B — GitHub Pages:</b> repo nuevo → subes ambos HTML → Settings → Pages → Deploy.</p>
+          <p style="margin-top:8px" class="small">Nota: yo no puedo subirlo por ti desde acá, pero el paquete viene listo para “arrastrar y soltar”.</p>
+        </div>
+      </section>
+
+      <section id="faq" class="grid" style="margin-top:12px">
+        <div class="card">
+          <h2>8) Preguntas típicas (Q&A)</h2>
+          <div class="klist">
+            <div class="k"><span class="dot ok"></span><div><b>¿De dónde salen los datos?</b><div class="small">Demo: simulados. Piloto: Enel define 20 puntos y habilita data mínima.</div></div></div>
+            <div class="k"><span class="dot ok"></span><div><b>¿Qué reemplaza Excel?</b><div class="small">Catastro único + tickets + KPIs. Excel pasa a ser input, no “sistema”.</div></div></div>
+            <div class="k"><span class="dot ok"></span><div><b>¿Riesgos de privacidad?</b><div class="small">Anonimización, roles, bitácora de decisiones IA. Sin PII para la demo.</div></div></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="foot">© Activa Consultores — Protocolo Sinapsis · Manual EV Ops</div>
+    </main>
+  </div>
+
+<script>
+  const defaultDemo = "protocolo-sinapsis-v0_9_1-EVOPS-SCL20-DEMO.html";
+  const qs = new URLSearchParams(location.search);
+  const demoFile = qs.get("demo") || defaultDemo;
+
+  const demoNameEl = document.getElementById("demoName");
+  const openBtn = document.getElementById("openDemo");
+  const toggleBtn = document.getElementById("toggleEmbed");
+  const frame = document.getElementById("demoFrame");
+  const wrap = document.getElementById("embedWrap");
+  const status = document.getElementById("status");
+  const nav = document.getElementById("nav");
+
+  demoNameEl.textContent = demoFile;
+
+  function setStatus(msg) {
+    status.textContent = "Estado: " + msg;
+  }
+
+  openBtn.addEventListener("click", () => {
+    window.open(demoFile, "_blank");
+  });
+
+  let embedded = false;
+  toggleBtn.addEventListener("click", () => {
+    embedded = !embedded;
+    if (embedded) {
+      wrap.style.display = "block";
+      frame.src = demoFile;
+      setStatus("demo embebida (si no carga, usa servidor local).");
+    } else {
+      wrap.style.display = "none";
+      frame.src = "about:blank";
+      setStatus("demo oculta.");
+    }
+  });
+
+  nav.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-section]");
+    if (!btn) return;
+    [...nav.querySelectorAll("button")].forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    const id = btn.getAttribute("data-section");
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+
+  // "Checklist rápido" (best-effort; no lee el iframe por seguridad del navegador)
+  document.getElementById("runChecks").addEventListener("click", async () => {
+    setStatus("corriendo checklist…");
+    const checks = [
+      ["chk1", "Requiere internet (CDNs)"],
+      ["chk2", "EV Ops visible"],
+      ["chk3", "Crear ticket"],
+      ["chk4", "Export/Import"]
+    ];
+    // Mark as OK (manual confirmation) — we toggle on each run to guide the user.
+    checks.forEach(([id]) => {
+      const d = document.getElementById(id);
+      d.classList.toggle("ok");
+    });
+    setStatus("listo: confirma visualmente los 4 puntos (1 minuto).");
+  });
+</script>
+</body>
+</html>
