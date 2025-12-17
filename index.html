@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protocolo Sinapsis v0.9 - Activa Consultores</title>
+    <title>Protocolo Sinapsis v0.8-DEMO - Activa Consultores</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -90,69 +90,6 @@
             color: #d1d5db;
         }
     </style>
-
-<style>
-.btn{cursor:pointer;border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px 12px;background:rgba(255,255,255,.06);color:#e8eefc;font-weight:800}
-.btn.primary{border-color:rgba(31,111,235,.55);background:rgba(31,111,235,.18)}
-.btn.orange{border-color:rgba(255,122,26,.55);background:rgba(255,122,26,.14)}
-</style>
-
-
-<style>
-  /* --- PDF comité (Print) --- */
-  @media print {
-    table, tr { page-break-inside: avoid; break-inside: avoid; }
-    thead { display: table-header-group; }
-    tfoot { display: table-footer-group; }
-
-    body { background: white !important; color: #111 !important; }
-    .no-print { display: none !important; }
-    #sinapsisPrintReport { display: block !important; }
-  }
-  #sinapsisPrintReport {
-    display:none;
-    padding:24px;
-    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-  }
-  #sinapsisPrintReport h1 { margin:0 0 6px 0; font-size:20px; }
-  #sinapsisPrintReport .brandA { color:#1f6feb; font-weight:900; }
-  #sinapsisPrintReport .brandC { color:#ff7a1a; font-weight:900; }
-  #sinapsisPrintReport .muted { color:#4b5563; font-size:12px; }
-  #sinapsisPrintReport .grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:10px; margin-top:12px; }
-  #sinapsisPrintReport .kpi { border:1px solid #e5e7eb; border-radius:12px; padding:10px; }
-  #sinapsisPrintReport .kpi .t { color:#6b7280; font-size:12px; font-weight:800; }
-  #sinapsisPrintReport .kpi .v { font-size:18px; font-weight:900; margin-top:4px; }
-
-  #sinapsisPrintReport .sectionTitle { margin-top:14px; font-size:13px; font-weight:900; }
-  #sinapsisPrintReport .stationTable { margin-top:8px; border:1px solid #e5e7eb; border-radius:12px; overflow:hidden; }
-  #sinapsisPrintReport .row { display:flex; gap:10px; padding:8px 10px; border-top:1px solid #f3f4f6; font-size:12px; line-height:1.2; }
-  #sinapsisPrintReport .row.head { background:#f9fafb; font-weight:900; border-top:none; }
-  #sinapsisPrintReport .cell { flex:1; min-width:0; }
-  #sinapsisPrintReport .cell.small { flex:0 0 68px; text-align:right; font-variant-numeric: tabular-nums; }
-  #sinapsisPrintReport .badge { display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid #e5e7eb; font-weight:800; font-size:11px; }
-  #sinapsisPrintReport .b-offline { background:#fff1f2; border-color:#fecdd3; }
-  #sinapsisPrintReport .b-queue { background:#fff7ed; border-color:#fed7aa; }
-  #sinapsisPrintReport .b-occupied { background:#eff6ff; border-color:#bfdbfe; }
-  #sinapsisPrintReport .b-available { background:#ecfdf5; border-color:#bbf7d0; }
-
-</style>
-
-
-<style>
-/* --- v5.3 Print patch: evitar recorte del detalle por estación --- */
-@media print {
-    table, tr { page-break-inside: avoid; break-inside: avoid; }
-    thead { display: table-header-group; }
-    tfoot { display: table-footer-group; }
-
-  #sinapsisPrintReport .stationTable { overflow: visible !important; }
-  #sinapsisPrintReport .stationTable, 
-  #sinapsisPrintReport .stationTable * { break-inside: auto !important; page-break-inside: auto !important; }
-  #sinapsisPrintReport .stationRow { break-inside: avoid !important; page-break-inside: avoid !important; }
-  #sinapsisPrintReport .stationHead { break-inside: avoid !important; page-break-inside: avoid !important; }
-}
-</style>
-
 </head>
 <body class="bg-gray-900 text-white">
     <div id="root"></div>
@@ -160,8 +97,8 @@
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
 
-        console.log('🟢 ===== PROTOCOLO SINAPSIS v0.9 =====');
-        console.log('📦 Incluye datos pre-cargados para evaluación');
+        console.log('🟢 ===== PROTOCOLO SINAPSIS v0.8-DEMO =====');
+        console.log('📦 Incluye datos demo pre-cargados para evaluación');
 
         // ============================================
         // UTILITIES
@@ -411,7 +348,6 @@
                     const key = `sinapsis-project-${project.id}`;
                     const jsonString = JSON.stringify(project);
                     localStorage.setItem(key, jsonString);
-                    window.dispatchEvent(new CustomEvent('sinapsis:projectsUpdated'));
                     console.log(`✅ GUARDADO OK: ${key}`);
                     return true;
                 } catch (e) {
@@ -439,32 +375,24 @@
                     const projects = [];
                     for (let i = 0; i < localStorage.length; i++) {
                         const key = localStorage.key(i);
-                        if (key && key.startsWith('sinapsis-project-')) {
+                        if (key.startsWith('sinapsis-project-')) {
                             const data = localStorage.getItem(key);
-                            if (!data) continue;
-                            try {
-                                const parsed = JSON.parse(data);
-                                if (parsed && parsed.id) projects.push(parsed);
-                            } catch (parseErr) {
-                                console.warn('⚠️ Proyecto con JSON inválido (se omite):', key, parseErr);
+                            if (data) {
+                                projects.push(JSON.parse(data));
                             }
                         }
                     }
-                    // Orden: más recientes primero (si existe createdAt)
-                    projects.sort((a,b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
                     return projects;
                 } catch (e) {
                     console.error('❌ Storage loadAll failed:', e);
                     return [];
                 }
-            }
             },
             
             deleteProject: (projectId) => {
                 try {
                     const key = `sinapsis-project-${projectId}`;
                     localStorage.removeItem(key);
-                    window.dispatchEvent(new CustomEvent('sinapsis:projectsUpdated'));
                     console.log(`🗑️ ELIMINADO: ${key}`);
                     return true;
                 } catch (e) {
@@ -771,8 +699,8 @@
                             createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
                             lastModified: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
                             history: [
-                                { timestamp: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema' },
-                                { timestamp: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), event: 'completed', details: 'Análisis completado', user: 'Sistema' }
+                                { timestamp: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema Demo' },
+                                { timestamp: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), event: 'completed', details: 'Análisis completado', user: 'Sistema Demo' }
                             ]
                         },
                         {
@@ -785,8 +713,8 @@
                             createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
                             lastModified: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
                             history: [
-                                { timestamp: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema' },
-                                { timestamp: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(), event: 'status_change', details: 'Cambio pending -> active', user: 'Sistema' }
+                                { timestamp: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema Demo' },
+                                { timestamp: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(), event: 'status_change', details: 'Cambio pending -> active', user: 'Sistema Demo' }
                             ]
                         },
                         {
@@ -799,7 +727,7 @@
                             createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
                             lastModified: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
                             history: [
-                                { timestamp: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema' }
+                                { timestamp: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema Demo' }
                             ]
                         },
                         {
@@ -812,7 +740,7 @@
                             createdAt: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
                             lastModified: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(),
                             history: [
-                                { timestamp: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema' }
+                                { timestamp: new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema Demo' }
                             ]
                         },
                         {
@@ -825,7 +753,7 @@
                             createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
                             lastModified: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
                             history: [
-                                { timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema' }
+                                { timestamp: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema Demo' }
                             ]
                         },
                         {
@@ -838,8 +766,8 @@
                             createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(),
                             lastModified: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
                             history: [
-                                { timestamp: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema' },
-                                { timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), event: 'blocked', details: 'Bloqueado por compliance', user: 'Sistema' }
+                                { timestamp: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema Demo' },
+                                { timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(), event: 'blocked', details: 'Bloqueado por compliance', user: 'Sistema Demo' }
                             ]
                         },
                         {
@@ -852,7 +780,7 @@
                             createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
                             lastModified: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
                             history: [
-                                { timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema' }
+                                { timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema Demo' }
                             ]
                         }
                     ]
@@ -872,8 +800,8 @@
                             createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
                             lastModified: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
                             history: [
-                                { timestamp: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema' },
-                                { timestamp: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(), event: 'completed', details: 'Mapeo completado', user: 'Sistema' }
+                                { timestamp: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema Demo' },
+                                { timestamp: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(), event: 'completed', details: 'Mapeo completado', user: 'Sistema Demo' }
                             ]
                         },
                         {
@@ -886,7 +814,7 @@
                             createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
                             lastModified: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
                             history: [
-                                { timestamp: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema' }
+                                { timestamp: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema Demo' }
                             ]
                         },
                         {
@@ -899,7 +827,7 @@
                             createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
                             lastModified: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
                             history: [
-                                { timestamp: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema' }
+                                { timestamp: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema Demo' }
                             ]
                         },
                         {
@@ -912,7 +840,7 @@
                             createdAt: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(),
                             lastModified: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(),
                             history: [
-                                { timestamp: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema' }
+                                { timestamp: new Date(Date.now() - 9 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema Demo' }
                             ]
                         },
                         {
@@ -925,8 +853,8 @@
                             createdAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000).toISOString(),
                             lastModified: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
                             history: [
-                                { timestamp: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema' },
-                                { timestamp: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(), event: 'completed', details: 'Capacitaciones finalizadas', user: 'Sistema' }
+                                { timestamp: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema Demo' },
+                                { timestamp: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(), event: 'completed', details: 'Capacitaciones finalizadas', user: 'Sistema Demo' }
                             ]
                         }
                     ]
@@ -946,8 +874,8 @@
                             createdAt: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString(),
                             lastModified: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000).toISOString(),
                             history: [
-                                { timestamp: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema' },
-                                { timestamp: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000).toISOString(), event: 'completed', details: 'Estudio finalizado', user: 'Sistema' }
+                                { timestamp: new Date(Date.now() - 25 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema Demo' },
+                                { timestamp: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000).toISOString(), event: 'completed', details: 'Estudio finalizado', user: 'Sistema Demo' }
                             ]
                         },
                         {
@@ -960,7 +888,7 @@
                             createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
                             lastModified: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
                             history: [
-                                { timestamp: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema' }
+                                { timestamp: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema Demo' }
                             ]
                         },
                         {
@@ -973,7 +901,7 @@
                             createdAt: new Date(Date.now() - 16 * 24 * 60 * 60 * 1000).toISOString(),
                             lastModified: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
                             history: [
-                                { timestamp: new Date(Date.now() - 16 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema' }
+                                { timestamp: new Date(Date.now() - 16 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema Demo' }
                             ]
                         },
                         {
@@ -986,7 +914,7 @@
                             createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
                             lastModified: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
                             history: [
-                                { timestamp: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema' }
+                                { timestamp: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema Demo' }
                             ]
                         },
                         {
@@ -999,8 +927,8 @@
                             createdAt: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(),
                             lastModified: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
                             history: [
-                                { timestamp: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema' },
-                                { timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), event: 'blocked', details: 'Esperando presupuesto', user: 'Sistema' }
+                                { timestamp: new Date(Date.now() - 12 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema Demo' },
+                                { timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), event: 'blocked', details: 'Esperando presupuesto', user: 'Sistema Demo' }
                             ]
                         },
                         {
@@ -1013,7 +941,7 @@
                             createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
                             lastModified: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
                             history: [
-                                { timestamp: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema' }
+                                { timestamp: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(), event: 'created', details: 'Tarea creada', user: 'Sistema Demo' }
                             ]
                         }
                     ]
@@ -1144,10 +1072,10 @@
             const demoEVStations = [
                 {
                     id: 'ev-scl-01',
-                    name: 'Red EV - SCL 01',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 01',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'Las Condes',
-                    address: 'Punto 01, Las Condes, Santiago',
+                    address: 'Punto demo 01, Las Condes, Santiago',
                     lat: -33.404654,
                     lng: -70.58125,
                     powerKW: 50,
@@ -1159,10 +1087,10 @@
                 },
                 {
                     id: 'ev-scl-02',
-                    name: 'Red EV - SCL 02',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 02',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'Providencia',
-                    address: 'Punto 02, Providencia, Santiago',
+                    address: 'Punto demo 02, Providencia, Santiago',
                     lat: -33.427325,
                     lng: -70.610699,
                     powerKW: 150,
@@ -1174,10 +1102,10 @@
                 },
                 {
                     id: 'ev-scl-03',
-                    name: 'Red EV - SCL 03',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 03',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'Santiago Centro',
-                    address: 'Punto 03, Santiago Centro, Santiago',
+                    address: 'Punto demo 03, Santiago Centro, Santiago',
                     lat: -33.448237,
                     lng: -70.663189,
                     powerKW: 150,
@@ -1189,10 +1117,10 @@
                 },
                 {
                     id: 'ev-scl-04',
-                    name: 'Red EV - SCL 04',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 04',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'Ñuñoa',
-                    address: 'Punto 04, Ñuñoa, Santiago',
+                    address: 'Punto demo 04, Ñuñoa, Santiago',
                     lat: -33.45453,
                     lng: -70.591519,
                     powerKW: 50,
@@ -1204,10 +1132,10 @@
                 },
                 {
                     id: 'ev-scl-05',
-                    name: 'Red EV - SCL 05',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 05',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'La Reina',
-                    address: 'Punto 05, La Reina, Santiago',
+                    address: 'Punto demo 05, La Reina, Santiago',
                     lat: -33.440858,
                     lng: -70.531717,
                     powerKW: 50,
@@ -1219,10 +1147,10 @@
                 },
                 {
                     id: 'ev-scl-06',
-                    name: 'Red EV - SCL 06',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 06',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'Maipú',
-                    address: 'Punto 06, Maipú, Santiago',
+                    address: 'Punto demo 06, Maipú, Santiago',
                     lat: -33.512834,
                     lng: -70.766336,
                     powerKW: 22,
@@ -1234,10 +1162,10 @@
                 },
                 {
                     id: 'ev-scl-07',
-                    name: 'Red EV - SCL 07',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 07',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'Puente Alto',
-                    address: 'Punto 07, Puente Alto, Santiago',
+                    address: 'Punto demo 07, Puente Alto, Santiago',
                     lat: -33.620679,
                     lng: -70.564575,
                     powerKW: 100,
@@ -1249,10 +1177,10 @@
                 },
                 {
                     id: 'ev-scl-08',
-                    name: 'Red EV - SCL 08',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 08',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'La Florida',
-                    address: 'Punto 08, La Florida, Santiago',
+                    address: 'Punto demo 08, La Florida, Santiago',
                     lat: -33.538645,
                     lng: -70.573644,
                     powerKW: 150,
@@ -1264,10 +1192,10 @@
                 },
                 {
                     id: 'ev-scl-09',
-                    name: 'Red EV - SCL 09',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 09',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'Estación Central',
-                    address: 'Punto 09, Estación Central, Santiago',
+                    address: 'Punto demo 09, Estación Central, Santiago',
                     lat: -33.458144,
                     lng: -70.693863,
                     powerKW: 50,
@@ -1279,10 +1207,10 @@
                 },
                 {
                     id: 'ev-scl-10',
-                    name: 'Red EV - SCL 10',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 10',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'Quilicura',
-                    address: 'Punto 10, Quilicura, Santiago',
+                    address: 'Punto demo 10, Quilicura, Santiago',
                     lat: -33.343355,
                     lng: -70.70934,
                     powerKW: 60,
@@ -1294,10 +1222,10 @@
                 },
                 {
                     id: 'ev-scl-11',
-                    name: 'Red EV - SCL 11',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 11',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'Las Condes',
-                    address: 'Punto 11, Las Condes, Santiago',
+                    address: 'Punto demo 11, Las Condes, Santiago',
                     lat: -33.404744,
                     lng: -70.571055,
                     powerKW: 50,
@@ -1309,10 +1237,10 @@
                 },
                 {
                     id: 'ev-scl-12',
-                    name: 'Red EV - SCL 12',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 12',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'Providencia',
-                    address: 'Punto 12, Providencia, Santiago',
+                    address: 'Punto demo 12, Providencia, Santiago',
                     lat: -33.428156,
                     lng: -70.610494,
                     powerKW: 50,
@@ -1324,10 +1252,10 @@
                 },
                 {
                     id: 'ev-scl-13',
-                    name: 'Red EV - SCL 13',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 13',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'Santiago Centro',
-                    address: 'Punto 13, Santiago Centro, Santiago',
+                    address: 'Punto demo 13, Santiago Centro, Santiago',
                     lat: -33.445078,
                     lng: -70.654616,
                     powerKW: 50,
@@ -1339,10 +1267,10 @@
                 },
                 {
                     id: 'ev-scl-14',
-                    name: 'Red EV - SCL 14',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 14',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'Ñuñoa',
-                    address: 'Punto 14, Ñuñoa, Santiago',
+                    address: 'Punto demo 14, Ñuñoa, Santiago',
                     lat: -33.447772,
                     lng: -70.58972,
                     powerKW: 22,
@@ -1354,10 +1282,10 @@
                 },
                 {
                     id: 'ev-scl-15',
-                    name: 'Red EV - SCL 15',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 15',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'La Reina',
-                    address: 'Punto 15, La Reina, Santiago',
+                    address: 'Punto demo 15, La Reina, Santiago',
                     lat: -33.445372,
                     lng: -70.554014,
                     powerKW: 50,
@@ -1369,10 +1297,10 @@
                 },
                 {
                     id: 'ev-scl-16',
-                    name: 'Red EV - SCL 16',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 16',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'Maipú',
-                    address: 'Punto 16, Maipú, Santiago',
+                    address: 'Punto demo 16, Maipú, Santiago',
                     lat: -33.511505,
                     lng: -70.743564,
                     powerKW: 50,
@@ -1384,10 +1312,10 @@
                 },
                 {
                     id: 'ev-scl-17',
-                    name: 'Red EV - SCL 17',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 17',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'Puente Alto',
-                    address: 'Punto 17, Puente Alto, Santiago',
+                    address: 'Punto demo 17, Puente Alto, Santiago',
                     lat: -33.60512,
                     lng: -70.573831,
                     powerKW: 150,
@@ -1399,10 +1327,10 @@
                 },
                 {
                     id: 'ev-scl-18',
-                    name: 'Red EV - SCL 18',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 18',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'La Florida',
-                    address: 'Punto 18, La Florida, Santiago',
+                    address: 'Punto demo 18, La Florida, Santiago',
                     lat: -33.553312,
                     lng: -70.55508,
                     powerKW: 100,
@@ -1414,10 +1342,10 @@
                 },
                 {
                     id: 'ev-scl-19',
-                    name: 'Red EV - SCL 19',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 19',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'Estación Central',
-                    address: 'Punto 19, Estación Central, Santiago',
+                    address: 'Punto demo 19, Estación Central, Santiago',
                     lat: -33.453861,
                     lng: -70.689167,
                     powerKW: 50,
@@ -1429,10 +1357,10 @@
                 },
                 {
                     id: 'ev-scl-20',
-                    name: 'Red EV - SCL 20',
-                    provider: 'Operador EV',
+                    name: 'Enel X Demo - SCL 20',
+                    provider: 'ENEL X (DEMO)',
                     comuna: 'Quilicura',
-                    address: 'Punto 20, Quilicura, Santiago',
+                    address: 'Punto demo 20, Quilicura, Santiago',
                     lat: -33.352686,
                     lng: -70.723457,
                     powerKW: 150,
@@ -1449,7 +1377,7 @@
                 StorageOps.saveEVStation({
                     ...st,
                     source: 'SIMULATED',
-                    updatedBy: 'Sistema'
+                    updatedBy: 'Sistema Demo'
                 });
             });
 
@@ -1721,16 +1649,10 @@
             const [kpiReports, setKpiReports] = useState([]);
 
             useEffect(() => {
-                const loadAll = () => {
-                    const loadedProjects = StorageOps.loadAllProjects();
-                    const loadedKPIs = StorageOps.loadAllKPIReports();
-                    setProjects(loadedProjects);
-                    setKpiReports(loadedKPIs);
-                };
-                loadAll();
-                const onUpd = () => loadAll();
-                window.addEventListener('sinapsis:projectsUpdated', onUpd);
-                return () => window.removeEventListener('sinapsis:projectsUpdated', onUpd);
+                const loadedProjects = StorageOps.loadAllProjects();
+                const loadedKPIs = StorageOps.loadAllKPIReports();
+                setProjects(loadedProjects);
+                setKpiReports(loadedKPIs);
             }, []);
 
             // Calcular métricas agregadas globales
@@ -2818,19 +2740,11 @@
         // ============================================
         // EV OPS MODULE - CARGA ELÉCTRICA (DEMO)
         // ============================================
-        function EvOpsModule({ onGoProjects, onGoKpi, selectedStationId, onSelectStation, focusStationId }) {
+        function EvOpsModule({ onGoProjects }) {
             const [stations, setStations] = useState([]);
             const [search, setSearch] = useState('');
             const [filter, setFilter] = useState('all'); // all | available | occupied | queue | offline
             const [autoRefresh, setAutoRefresh] = useState(true);
-
-
-            // Enfoque rápido desde otros módulos (ej. ticket → volver a EV Ops)
-            useEffect(() => {
-                if (!focusStationId) return;
-                const st = stations.find(s => s.id === focusStationId);
-                if (st) setSearch(st.name);
-            }, [focusStationId, stations]);
 
             const loadStations = () => {
                 const loaded = StorageOps.loadAllEVStations();
@@ -2939,7 +2853,7 @@
                 const project = {
                     id: 'evops-santiago',
                     name: 'EV Ops Santiago (Piloto)',
-                    description: 'Proyecto para convertir “puntos ciegos” en métricas + acciones.',
+                    description: 'Proyecto demo para convertir “puntos ciegos” en métricas + acciones.',
                     status: 'active',
                     createdAt: new Date().toISOString(),
                     tasks: []
@@ -2959,12 +2873,12 @@
                     status: severity,
                     assignedAI: 'gpt4',
                     progress: 0,
-                    notes: `Origen: EV Ops\nComuna: ${station.comuna}\nDirección: ${station.address}\nPotencia: ${station.powerKW}kW\nConectores: ${(station.connectors || []).join(', ')}\nCoordenadas: ${station.lat}, ${station.lng}\nAcción sugerida: diagnóstico + comunicación a usuarios + SLA`,
+                    notes: `Origen: demo EV Ops\nComuna: ${station.comuna}\nDirección: ${station.address}\nPotencia: ${station.powerKW}kW\nConectores: ${(station.connectors || []).join(', ')}\nCoordenadas: ${station.lat}, ${station.lng}\nAcción sugerida: diagnóstico + comunicación a usuarios + SLA`,
                     createdAt: new Date().toISOString(),
                     lastModified: new Date().toISOString(),
                     history: [
-                        { timestamp: new Date().toISOString(), event: 'created', details: 'Ticket creado desde EV Ops', user: 'Sistema' },
-                        { timestamp: new Date().toISOString(), event: 'ai_assigned', details: 'Asignado a GPT-4', user: 'Sistema' }
+                        { timestamp: new Date().toISOString(), event: 'created', details: 'Ticket creado desde EV Ops', user: 'Sistema Demo' },
+                        { timestamp: new Date().toISOString(), event: 'ai_assigned', details: 'Asignado a GPT-4', user: 'Sistema Demo' }
                     ]
                 };
 
@@ -2975,11 +2889,10 @@
 
                 StorageOps.saveProject(updatedProject);
 
-                if (onSelectStation) onSelectStation(station.id);
-                if (onGoProjects) onGoProjects({ station, taskId, projectId: project.id });
+                if (onGoProjects) onGoProjects();
             };
 
-            const projectHint = '';
+            const projectHint = 'Tip: crea un ticket en 1 clic y salta a “Proyectos & Tareas”.';
 
             // Map bounds (aprox) para Santiago
             const bounds = { latMin: -33.65, latMax: -33.33, lngMin: -70.80, lngMax: -70.52 };
@@ -2989,21 +2902,11 @@
                 const y = (1 - (st.lat - bounds.latMin) / (bounds.latMax - bounds.latMin)) * 100;
                 return { x: Math.min(98, Math.max(2, x)), y: Math.min(96, Math.max(4, y)) };
             };
-            const selectedStation = stations.find(s => s.id === selectedStationId) || null;
-
 
             return (
                 <div>
                     <div className="mb-8">
-                        <h2 className="text-3xl font-bold text-white mb-2">⚡ EV Ops — Puntos de Carga</h2>
-                        {selectedStation && (
-                            <div className="text-sm text-gray-300 mt-1">
-                                Contexto actual: <span className="font-semibold text-white">{selectedStation.name}</span>
-                                <span className="text-gray-500"> · </span>
-                                <span className="text-gray-400">Estado:</span> <span className="font-semibold text-white">{selectedStation.status}</span>
-                            </div>
-                        )}
-
+                        <h2 className="text-3xl font-bold text-white mb-2">⚡ EV Ops — Puntos de Carga (Demo)</h2>
                         <p className="text-gray-400">
                             Datos simulados para mostrar el salto: visibilidad + métricas + acciones (sin tocar datos internos).
                         </p>
@@ -3084,7 +2987,7 @@
                         {/* Map */}
                         <div className="bg-gray-800 rounded-lg p-5 border border-gray-700">
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-xl font-bold text-white">🗺️ “Mapa vivo”</h3>
+                                <h3 className="text-xl font-bold text-white">🗺️ “Mapa vivo” (demo)</h3>
                                 <div className="text-xs text-gray-400">Puntos = estaciones (posición aproximada)</div>
                             </div>
 
@@ -3115,7 +3018,7 @@
                         {/* List */}
                         <div className="bg-gray-800 rounded-lg p-5 border border-gray-700">
                             <div className="flex items-center justify-between mb-4">
-                                <h3 className="text-xl font-bold text-white">📍 Estaciones</h3>
+                                <h3 className="text-xl font-bold text-white">📍 Estaciones (demo)</h3>
                                 <div className="text-sm text-gray-400">{stationsFiltered.length} visibles</div>
                             </div>
 
@@ -3148,20 +3051,7 @@
                                                         🧾 Crear ticket
                                                     </button>
                                                 )}
-                                            
-                                                <button
-                                                    onClick={() => { if (onSelectStation) onSelectStation(st.id); if (onGoKpi) onGoKpi(st); }}
-                                                    className="px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg text-sm font-semibold hover:bg-gray-700 transition"
-                                                >
-                                                    📊 Ver KPIs EV
-                                                </button>
-                                                <button
-                                                    onClick={() => { if (onSelectStation) onSelectStation(st.id); }}
-                                                    className="px-4 py-2 bg-gray-900 border border-gray-700 text-gray-200 rounded-lg text-sm font-semibold hover:bg-gray-800 transition"
-                                                >
-                                                    🎯 Seleccionar
-                                                </button>
-</div>
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
@@ -3178,274 +3068,7 @@
             );
         }
 
-        
-
         // ============================================
-        // EV DATA HUB - KPI EV + EXPORTS (sin tocar KPI Analytics)
-        // ============================================
-        function EvDataHubModule({selectedStationId, onSelectStation, onGoEvOps, onGoKpiAnalytics, onGoProjects, onGoKpiEvOps}) {
-            const [stations, setStations] = useState([]);
-            const [scope, setScope] = useState('city'); // 'city' | 'station'
-            const [autoRefresh, setAutoRefresh] = useState(true);
-
-            const loadStations = () => {
-                const loaded = StorageOps.loadAllEVStations();
-                setStations(loaded);
-            };
-
-            useEffect(() => {
-                loadStations();
-            }, []);
-
-            useEffect(() => {
-                if (!autoRefresh) return;
-                const id = setInterval(() => loadStations(), 12000);
-                return () => clearInterval(id);
-            }, [autoRefresh]);
-
-            const selectedStation = stations.find(s => s.id === selectedStationId) || null;
-            const scopeStations = (scope === 'station' && selectedStation) ? [selectedStation] : stations;
-
-            const sum = (arr, fn) => arr.reduce((acc, x) => acc + (fn(x) || 0), 0);
-            const count = (arr, fn) => arr.reduce((acc, x) => acc + (fn(x) ? 1 : 0), 0);
-
-            const total = scopeStations.length || 0;
-            const nAvailable = count(scopeStations, s => s.status === 'available');
-            const nOccupied  = count(scopeStations, s => s.status === 'occupied');
-            const nOffline   = count(scopeStations, s => s.status === 'offline');
-            const avgQueue   = total ? (sum(scopeStations, s => Number(s.queue || 0)) / total) : 0;
-            const powerInstalled = sum(scopeStations, s => Number(s.powerKW || 0));
-            const powerActiveEst = sum(scopeStations, s => (s.status === 'occupied' ? Number(s.powerKW || 0) * 0.7 : 0)); // estimación transparente
-
-            const pct = (n) => total ? Math.round((n / total) * 100) : 0;
-
-            const kpis = {
-                availability_pct: pct(nAvailable),
-                occupancy_pct: pct(nOccupied),
-                offline_count: nOffline,
-                avg_queue: Number(avgQueue.toFixed(1)),
-                active_power_kw_est: Math.round(powerActiveEst)
-            };
-
-            const downloadText = (filename, content, mime) => {
-                const blob = new Blob([content], { type: mime || 'text/plain;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                setTimeout(() => URL.revokeObjectURL(url), 1000);
-            };
-
-            const exportJSON = () => {
-                const payload = {
-                    platform: 'Protocolo Sinapsis v0.9 (EV Ops)',
-                    generated_at: new Date().toISOString(),
-                    scope: scope,
-                    selected_station_id: selectedStationId || null,
-                    kpis,
-                    stations: scopeStations
-                };
-                downloadText(`sinapsis-ev-kpis-${scope}.json`, JSON.stringify(payload, null, 2), 'application/json;charset=utf-8');
-            };
-
-            const exportCSV = () => {
-                const header = ['id','name','comuna','address','status','powerKW','queue','lastUpdate'];
-                const rows = scopeStations.map(s => [
-                    s.id,
-                    (s.name || '').replaceAll('"','""'),
-                    (s.comuna || '').replaceAll('"','""'),
-                    (s.address || '').replaceAll('"','""'),
-                    s.status,
-                    s.powerKW,
-                    s.queue,
-                    s.lastUpdate
-                ]);
-                const csv = [
-                    header.join(','),
-                    ...rows.map(r => r.map(v => `"${String(v ?? '').replaceAll('"','""')}"`).join(','))
-                ].join('\n');
-                downloadText(`sinapsis-ev-stations-${scope}.csv`, csv, 'text/csv;charset=utf-8');
-            };
-
-            const exportPDF = () => {
-                const payload = {
-                    platform: 'Protocolo Sinapsis v0.9 (EV Ops)',
-                    generated_at: new Date().toISOString(),
-                    scope: scope,
-                    selected_station_id: selectedStationId || null,
-                    kpis,
-                    stations: scopeStations
-                };
-
-                // Fill print report (Reporte comité)
-                const meta = document.getElementById('spr_meta');
-                if (meta) meta.textContent = new Date(payload.generated_at).toLocaleString();
-
-                const scopeEl = document.getElementById('spr_scope');
-                const ticketEl = document.getElementById('spr_ticket');
-                const kpiBox = document.getElementById('spr_kpis');
-
-                if (payload.scope === 'station' && payload.stations && payload.stations[0]) {
-                    const st = payload.stations[0];
-                    if (scopeEl) scopeEl.textContent = `Estación: ${String(st.id || '').toUpperCase()} · ${st.comuna || ''}`;
-                    if (ticketEl) {
-                        // Demo: ticket info lives in Proyectos & Tareas; aquí mostramos contexto de estación.
-                        ticketEl.textContent = `Estado: ${st.status} · Cola: ${st.queue ?? 0} · Potencia: ${st.powerKW ?? ''} kW`;
-                    }
-                } else {
-                    if (scopeEl) scopeEl.textContent = 'Ciudad: vista general';
-                    if (ticketEl) ticketEl.textContent = 'Resumen agregado (todas las estaciones)';
-                }
-
-                if (kpiBox) {
-                    kpiBox.innerHTML = `
-                        <div class="kpi"><div class="t">Disponibilidad</div><div class="v">${payload.kpis.availability_pct}%</div></div>
-                        <div class="kpi"><div class="t">Ocupación</div><div class="v">${payload.kpis.occupancy_pct}%</div></div>
-                        <div class="kpi"><div class="t">Offline</div><div class="v">${payload.kpis.offline_count}</div></div>
-                        <div class="kpi"><div class="t">Cola prom.</div><div class="v">${payload.kpis.avg_queue}</div></div>
-                        <div class="kpi"><div class="t">Potencia activa</div><div class="v">${payload.kpis.active_power_kw_est} kW</div></div>
-                    `;
-                }
-
-                // Print dialog -> Guardar como PDF
-                window.print();
-            };
-
-
-            return (
-                <div className="bg-gray-900/40 border border-gray-700 rounded-2xl p-6">
-                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 mb-5">
-                        <div>
-                            <h2 className="text-2xl font-bold text-white">🧩 EV Data Hub</h2>
-                            <p className="text-gray-300 mt-1">
-                                KPI EV + exportables <span className="text-gray-400">(JSON / CSV‑Excel)</span> 
-                            </p>
-                            <p className="text-xs text-gray-400 mt-2">
-                                
-                            </p>
-                        </div>
-
-                        <div className="flex flex-wrap gap-2">
-                            <button onClick={() => onGoEvOps(selectedStationId)} className="px-4 py-2 bg-yellow-700 hover:bg-yellow-800 text-white rounded-lg text-sm font-semibold transition">
-                                🗺️ Ir a EV Ops (mapa)
-                            </button>
-                            <button onClick={() => onGoProjects && onGoProjects()} className="px-4 py-2 bg-purple-700 hover:bg-purple-800 text-white rounded-lg text-sm font-semibold transition">
-                                🎯 Proyectos
-                            </button>
-                            <button onClick={() => onGoKpiAnalytics && onGoKpiAnalytics()} className="px-4 py-2 bg-blue-700 hover:bg-blue-800 text-white rounded-lg text-sm font-semibold transition">
-                                📊 KPI Analytics
-                            </button>
-                        <button onClick={() => onGoKpiEvOps && onGoKpiEvOps(selectedStationId)} className="px-4 py-2 bg-green-700 hover:bg-green-800 text-white rounded-lg text-sm font-semibold transition">
-                                ⚡ KPI EV Ops Carga
-                            </button>
-                            </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-                        <div className="bg-gray-900 border border-gray-700 rounded-xl p-4">
-                            <div className="text-white font-semibold mb-2">⚡ Contexto EV</div>
-                            <div className="flex flex-col gap-2">
-                                <select
-                                    value={selectedStationId}
-                                    onChange={(e) => onSelectStation && onSelectStation(e.target.value)}
-                                    className="px-3 py-2 bg-gray-900 border border-gray-700 text-white rounded-lg text-sm"
-                                >
-                                    <option value="">Ciudad (todas las estaciones)</option>
-                                    {stations.map(s => (
-                                        <option key={s.id} value={s.id}>{s.name}</option>
-                                    ))}
-                                </select>
-
-                                <div className="flex items-center justify-between gap-2 text-xs text-gray-400">
-                                    <div>Auto-refresh</div>
-                                    <button
-                                        onClick={() => setAutoRefresh(a => !a)}
-                                        className={`px-3 py-1 rounded-lg border ${autoRefresh ? 'border-green-600 bg-green-900/40 text-green-200' : 'border-gray-600 bg-gray-800 text-gray-300'}`}
-                                    >
-                                        {autoRefresh ? 'ON' : 'OFF'}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="bg-gray-900 border border-gray-700 rounded-xl p-4">
-                            <div className="text-white font-semibold mb-2">🎛️ Alcance KPI EV</div>
-                            <div className="flex flex-wrap gap-2">
-                                <button
-                                    onClick={() => setScope('city')}
-                                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition border ${scope === 'city' ? 'bg-gray-800 border-gray-500 text-white' : 'bg-gray-900 border-gray-700 text-gray-300 hover:bg-gray-800'}`}
-                                >
-                                    🏙️ Ciudad
-                                </button>
-                                <button
-                                    onClick={() => setScope('station')}
-                                    className={`px-4 py-2 rounded-lg text-sm font-semibold transition border ${scope === 'station' ? 'bg-gray-800 border-gray-500 text-white' : 'bg-gray-900 border-gray-700 text-gray-300 hover:bg-gray-800'}`}
-                                    disabled={!selectedStation}
-                                    title={!selectedStation ? 'Selecciona una estación para KPI por estación' : 'KPI por estación'}
-                                >
-                                    📍 Estación
-                                </button>
-                            </div>
-                            <div className="text-xs text-gray-400 mt-2">
-                                
-                            Tip: PDF comité se genera con Imprimir → Guardar como PDF (sin datos personales).</div>
-                        </div>
-
-                        <div className="bg-gray-900 border border-gray-700 rounded-xl p-4">
-                            <div className="text-white font-semibold mb-2">⬇️ Exportar datos</div>
-                            <div className="flex flex-wrap gap-2">
-                                <button onClick={exportJSON} className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg text-sm font-semibold transition border border-gray-700">
-                                    JSON KPIs
-                                </button>
-                                <button onClick={exportCSV} className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg text-sm font-semibold transition border border-gray-700">
-                                    CSV Estaciones
-                                </button>
-                            
-                                <button onClick={exportPDF} className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg text-sm font-semibold transition border border-gray-700">
-                                    PDF comité
-                                </button>
-</div>
-                            <div className="text-xs text-gray-400 mt-2">
-                                
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
-                        <div className="bg-gray-900 border border-gray-700 rounded-xl p-4">
-                            <div className="text-xs text-gray-400">Disponibilidad</div>
-                            <div className="text-3xl font-bold text-white">{kpis.availability_pct}%</div>
-                            <div className="text-xs text-gray-500 mt-1">Estaciones “available” / total</div>
-                        </div>
-                        <div className="bg-gray-900 border border-gray-700 rounded-xl p-4">
-                            <div className="text-xs text-gray-400">Ocupación</div>
-                            <div className="text-3xl font-bold text-white">{kpis.occupancy_pct}%</div>
-                            <div className="text-xs text-gray-500 mt-1">Estaciones “occupied” / total</div>
-                        </div>
-                        <div className="bg-gray-900 border border-gray-700 rounded-xl p-4">
-                            <div className="text-xs text-gray-400">Offline (conteo)</div>
-                            <div className="text-3xl font-bold text-white">{kpis.offline_count}</div>
-                            <div className="text-xs text-gray-500 mt-1">Señal perdida / falla operativa</div>
-                        </div>
-                        <div className="bg-gray-900 border border-gray-700 rounded-xl p-4">
-                            <div className="text-xs text-gray-400">Cola promedio</div>
-                            <div className="text-3xl font-bold text-white">{kpis.avg_queue}</div>
-                            <div className="text-xs text-gray-500 mt-1">Personas/vehículos esperando</div>
-                        </div>
-                        <div className="bg-gray-900 border border-gray-700 rounded-xl p-4">
-                            <div className="text-xs text-gray-400">Potencia activa (est.)</div>
-                            <div className="text-3xl font-bold text-white">{kpis.active_power_kw_est} kW</div>
-                            <div className="text-xs text-gray-500 mt-1">Estimación: 70% de potencia nominal en ocupados</div>
-                        </div>
-                    </div>
-                </div>
-            );
-        }
-
-// ============================================
         // KPI MODULE - UI COMPONENTS
         // ============================================
         function KPIForm({ onCalculate, onCancel }) {
@@ -3685,40 +3308,10 @@
             const [selectedReport, setSelectedReport] = useState(null);
             const [showPDFFlash, setShowPDFFlash] = useState(false);
 
-
-            // ============================================
-            // EV OPS CONTEXTO GLOBAL (selector + deep links)
-            // ============================================
-            const [evStations, setEvStations] = useState([]);
-            const [evSelectedStationId, setEvSelectedStationId] = useState('');
-            const [evSelectedConnectorId, setEvSelectedConnectorId] = useState('');
-            const [evLastAction, setEvLastAction] = useState(null); // { station, taskId, projectId }
-            const [evFocusStationId, setEvFocusStationId] = useState(''); // foco temporal para mapa (no filtra por defecto)
-
-
             useEffect(() => {
                 const saved = StorageOps.loadAllKPIReports();
                 setKpiReports(saved);
             }, []);
-
-            // Carga estaciones EV para selector global
-            useEffect(() => {
-                const sts = StorageOps.loadAllEVStations();
-                setEvStations(sts);
-                if (sts.length && !evSelectedStationId) {
-                    setEvSelectedStationId(sts[0].id);
-                }
-            }, []);
-
-            // Conector por defecto al cambiar estación
-            useEffect(() => {
-                const st = evStations.find(s => s.id === evSelectedStationId) || evStations[0];
-                if (!st) return;
-                const firstConn = (st.connectors && st.connectors[0]) ? st.connectors[0] : '';
-                const connectors = st.connectors || [];
-                const needsReset = !evSelectedConnectorId || (connectors.length && !connectors.includes(evSelectedConnectorId));
-                if (needsReset) setEvSelectedConnectorId(firstConn);
-            }, [evSelectedStationId, evStations]);
 
             const handleCalculate = (data, ai) => {
                 const kpiResults = calculateKPIs(data);
@@ -3800,243 +3393,14 @@
                 setTimeout(() => setShowPDFFlash(false), 2000);
             };
 
-            
-            const selectedEVStation = evStations.find(s => s.id === evSelectedStationId) || evStations[0] || null;
-
-            const goEvOps = (stationId) => {
-                if (stationId) {
-                    setEvSelectedStationId(stationId);
-                    setEvFocusStationId(stationId);
-                    // Limpia el foco para no “encerrar” el mapa en una sola estación
-                    window.setTimeout(() => setEvFocusStationId(''), 450);
-                }
-                setMainModule('evops');
-            };
-
-            const goEvKpi = (station) => {
-                if (station && station.id) setEvSelectedStationId(station.id);
-                setKpiView('ev');
-                setMainModule('kpi');
-            };
-
-            const computeEVKPIs = (stations, stationId) => {
-    const scope = stationId ? stations.filter(s => s.id === stationId) : stations;
-    const total = scope.length || 0;
-
-    const isBusy = (s) => s.status === 'occupied' || s.status === 'queue';
-    const safeNum = (v) => (Number.isFinite(+v) ? +v : 0);
-
-    const available = scope.filter(s => s.status === 'available').length;
-    const occupied = scope.filter(s => s.status === 'occupied').length;
-    const queued = scope.filter(s => s.status === 'queue').length;
-    const offline = scope.filter(s => s.status === 'offline').length;
-    const busy = scope.filter(isBusy).length;
-
-    const avgOcc = total ? (scope.reduce((sum, s) => sum + safeNum(s.occupancy), 0) / total) : 0;
-    const avgQueue = total ? (scope.reduce((sum, s) => sum + safeNum(s.queue), 0) / total) : 0;
-    const avgOccBusy = busy ? (scope.filter(isBusy).reduce((sum, s) => sum + safeNum(s.occupancy), 0) / busy) : 0;
-
-    const nominalKW = total ? scope.reduce((sum, s) => sum + safeNum(s.powerKW), 0) : 0;
-    const utilizedKW = total ? scope.reduce((sum, s) => sum + (safeNum(s.powerKW) * (safeNum(s.occupancy) / 100)), 0) : 0;
-    const utilizationPowerPct = nominalKW > 0 ? (utilizedKW / nominalKW) * 100 : 0;
-
-    const queueTotal = total ? scope.reduce((sum, s) => sum + safeNum(s.queue), 0) : 0;
-
-    const percentile = (arr, p) => {
-        if (!arr.length) return 0;
-        const a = [...arr].sort((x,y) => x - y);
-        const idx = (a.length - 1) * p;
-        const lo = Math.floor(idx), hi = Math.ceil(idx);
-        if (lo === hi) return a[lo];
-        return a[lo] + (a[hi] - a[lo]) * (idx - lo);
-    };
-
-    const queueArr = scope.map(s => safeNum(s.queue));
-    const occArr = scope.map(s => safeNum(s.occupancy));
-    const queueP95 = percentile(queueArr, 0.95);
-    const occP95 = percentile(occArr, 0.95);
-
-    const availabilityPct = total ? (available / total) * 100 : 0;
-    const busyPct = total ? (busy / total) * 100 : 0;
-
-    const topCongestion = [...scope]
-        .sort((a,b) => safeNum(b.queue) - safeNum(a.queue))
-        .slice(0, Math.min(5, scope.length))
-        .map(s => ({
-            id: s.id,
-            name: s.name,
-            comuna: s.comuna || '',
-            status: s.status,
-            queue: safeNum(s.queue),
-            occupancy: safeNum(s.occupancy),
-            powerKW: safeNum(s.powerKW),
-        }));
-
-    const byComuna = Object.entries(scope.reduce((acc, s) => {
-        const k = (s.comuna || '—');
-        acc[k] = acc[k] || {comuna: k, total: 0, available: 0, busy: 0, offline: 0, queueTotal: 0};
-        acc[k].total += 1;
-        if (s.status === 'available') acc[k].available += 1;
-        if (isBusy(s)) acc[k].busy += 1;
-        if (s.status === 'offline') acc[k].offline += 1;
-        acc[k].queueTotal += safeNum(s.queue);
-        return acc;
-    }, {})).map(([_, v]) => ({
-        ...v,
-        availabilityPct: v.total ? (v.available / v.total) * 100 : 0,
-        busyPct: v.total ? (v.busy / v.total) * 100 : 0,
-        avgQueue: v.total ? (v.queueTotal / v.total) : 0
-    })).sort((a,b) => b.total - a.total);
-
-    const byConnector = Object.entries(scope.reduce((acc, s) => {
-        const conns = Array.isArray(s.connectors) ? s.connectors : [];
-        conns.forEach(c => { acc[c] = (acc[c] || 0) + 1; });
-        return acc;
-    }, {})).map(([connector, count]) => ({connector, count})).sort((a,b)=>b.count-a.count);
-
-    return {
-        stationId: stationId || null,
-        total,
-        available,
-        occupied,
-        queued,
-        offline,
-        busy,
-        availabilityPct,
-        busyPct,
-        avgOcc,
-        avgOccBusy,
-        occP95,
-        avgQueue,
-        queueP95,
-        queueTotal,
-        nominalKW,
-        utilizedKW,
-        utilizationPowerPct,
-        topCongestion,
-        byComuna,
-        byConnector,
-    };
-};
-
-const evK = computeEVKPIs(evStations, evSelectedStationId);
-
-            const exportEVKPIsAsJSON = (evK) => {
-    const payload = {
-        scope: evK.stationId ? 'station' : 'city',
-        generatedAt: new Date().toISOString(),
-        stationId: evK.stationId,
-        kpis: {
-            total: evK.total,
-            available: evK.available,
-            occupied: evK.occupied,
-            queued: evK.queued,
-            offline: evK.offline,
-            busy: evK.busy,
-            availabilityPct: evK.availabilityPct,
-            busyPct: evK.busyPct,
-            avgOcc: evK.avgOcc,
-            avgOccBusy: evK.avgOccBusy,
-            occP95: evK.occP95,
-            avgQueue: evK.avgQueue,
-            queueP95: evK.queueP95,
-            queueTotal: evK.queueTotal,
-            nominalKW: evK.nominalKW,
-            utilizedKW: evK.utilizedKW,
-            utilizationPowerPct: evK.utilizationPowerPct,
-        },
-        topCongestion: evK.topCongestion,
-        byComuna: evK.byComuna,
-        byConnector: evK.byConnector,
-    };
-    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = evK.stationId ? `sinapsis-ev-kpis-${evK.stationId}.json` : `sinapsis-ev-kpis-ciudad.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-};
-
-const exportEVKPIsAsCSV = (stations, evK) => {
-    const scope = evK.stationId ? stations.filter(s => s.id === evK.stationId) : stations;
-
-    // 1) Resumen KPI (una fila)
-    const summaryHeaders = [
-        'scope','stationId','total','available','occupied','queued','offline','busy',
-        'availabilityPct','busyPct','avgOcc','avgOccBusy','occP95','avgQueue','queueP95','queueTotal',
-        'nominalKW','utilizedKW','utilizationPowerPct','generatedAt'
-    ];
-    const summaryRow = [
-        evK.stationId ? 'station' : 'city',
-        evK.stationId || '',
-        evK.total, evK.available, evK.occupied, evK.queued, evK.offline, evK.busy,
-        evK.availabilityPct.toFixed(2), evK.busyPct.toFixed(2),
-        evK.avgOcc.toFixed(2), evK.avgOccBusy.toFixed(2), evK.occP95.toFixed(2),
-        evK.avgQueue.toFixed(2), evK.queueP95.toFixed(2), evK.queueTotal,
-        evK.nominalKW.toFixed(2), evK.utilizedKW.toFixed(2), evK.utilizationPowerPct.toFixed(2),
-        new Date().toISOString()
-    ];
-
-    // 2) Detalle por estación (para Excel)
-    const detailHeaders = ['id','name','comuna','status','powerKW','occupancy','queue','connectors','lastUpdate','lat','lng','address'];
-    const detailRows = scope.map(s => detailHeaders.map(h => {
-        const v = (h === 'connectors') ? (Array.isArray(s.connectors) ? s.connectors.join('|') : '') : (s[h] ?? '');
-        return JSON.stringify(v);
-    }).join(','));
-
-    const sections = [
-        '# KPI_RESUMEN',
-        summaryHeaders.join(','),
-        summaryRow.map(v => JSON.stringify(v)).join(','),
-        '',
-        '# ESTACIONES_DETALLE',
-        detailHeaders.join(','),
-        ...detailRows
-    ].join('\n');
-
-    const blob = new Blob([sections], { type: 'text/csv;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = evK.stationId ? `sinapsis-ev-kpis-${evK.stationId}.csv` : `sinapsis-ev-kpis-ciudad.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-};
-
-const exportEVAsJSON = (stations, stationId) => {
-                const scope = stationId ? stations.filter(s => s.id === stationId) : stations;
-                const blob = new Blob([JSON.stringify(scope, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = stationId ? `sinapsis-ev-${stationId}.json` : `sinapsis-ev-santiago.json`;
-                a.click();
-                URL.revokeObjectURL(url);
-            };
-
-            const exportEVAsCSV = (stations, stationId) => {
-                const scope = stationId ? stations.filter(s => s.id === stationId) : stations;
-                const headers = ['id','name','comuna','address','status','powerKW','occupancy','queue','connectors','lastUpdate','lat','lng'];
-                const rows = scope.map(s => headers.map(h => JSON.stringify(s[h] ?? '')).join(','));
-                const csv = [headers.join(','), ...rows].join('\n');
-                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = stationId ? `sinapsis-ev-${stationId}.csv` : `sinapsis-ev-santiago.csv`;
-                a.click();
-                URL.revokeObjectURL(url);
-            };
-
-return (
+            return (
                 <div className="min-h-screen p-8">
                     <div className="max-w-7xl mx-auto">
                         {/* Header */}
                         <div className="mb-8 text-center">
-                            <h1 className="text-4xl font-bold gradient-text mb-2">Protocolo Sinapsis v0.9</h1>
+                            <h1 className="text-4xl font-bold gradient-text mb-2">Protocolo Sinapsis v0.8</h1>
                             <p className="text-gray-400">Sistema de Orquestación IA Multi-Especialista</p>
-                            <p className="text-sm text-gray-500 mt-1">Activa Consultores - COMPLETE Edition Demo</p>
+                            <p className="text-sm text-gray-500 mt-1">Activa Consultores - COMPLETE Edition</p>
                         </div>
 
                         {/* Main Navigation */}
@@ -4060,13 +3424,7 @@ return (
                                 ⚡ EV Ops Carga
                             </button>
                             <button
-                                onClick={() => setMainModule('evdata')}
-                                className={`main-nav-tab ${mainModule === 'evdata' ? 'active' : ''}`}
-                            >
-                                🧩 EV Data Hub
-                            </button>
-                            <button
-                                onClick={() => { setKpiView('dashboard'); setMainModule('kpi'); }}
+                                onClick={() => setMainModule('kpi')}
                                 className={`main-nav-tab ${mainModule === 'kpi' ? 'active' : ''}`}
                             >
                                 📊 KPI Analytics
@@ -4075,275 +3433,13 @@ return (
 
                         {/* Modules */}
                         {mainModule === 'home' && <HomeModule />}
-                        {mainModule === 'projects' && (
-                            <div>
-                                {evLastAction?.station && (
-                                    <div className="mb-6 bg-gray-900 border border-gray-700 rounded-xl p-4">
-                                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-                                            <div>
-                                                <div className="text-white font-semibold">🎫 Ticket EV creado → Proyectos & Tareas</div>
-                                                <div className="text-sm text-gray-300">
-                                                    Estación: <span className="font-semibold">{evLastAction.station.name}</span>
-                                                    {' '}· Estado: <span className="font-semibold">{evLastAction.station.status}</span>
-                                                    {' '}· SIMULATED
-                                                </div>
-                                            </div>
-                                            <div className="flex flex-wrap gap-2">
-                                                <button
-                                                    onClick={() => goEvOps(evLastAction.station.id)}
-                                                    className="px-4 py-2 bg-yellow-700 text-white rounded-lg text-sm font-semibold hover:bg-yellow-800 transition"
-                                                >
-                                                    ⚡ Volver a EV Ops
-                                                </button>
-                                                <button
-                                                    onClick={() => setMainModule('evdata')}
-                                                    className="px-4 py-2 bg-blue-700 text-white rounded-lg text-sm font-semibold hover:bg-blue-800 transition"
-                                                >
-                                                    🧩 EV Data Hub
-                                                </button>
-                                                <button
-                                                    onClick={() => setEvLastAction(null)}
-                                                    className="px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg text-sm font-semibold hover:bg-gray-700 transition"
-                                                >
-                                                    ✅ Ocultar
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                                <ProjectsModule />
-                            </div>
-                        )}
-                        {mainModule === 'evops' && (
-                            <EvOpsModule
-                                onGoProjects={(payload) => {
-                                    setEvLastAction(payload || null);
-                                    if (payload && payload.station && payload.station.id) {
-                                        setEvSelectedStationId(payload.station.id);
-                                    }
-                                    setMainModule('projects');
-                                }}
-                                onGoKpi={(st) => goEvKpi(st)}
-                                selectedStationId={evSelectedStationId}
-                                onSelectStation={(id) => setEvSelectedStationId(id)}
-                                focusStationId={evFocusStationId}
-                            />
-                        )}
-
-                        {mainModule === 'evdata' && (
-                            <EvDataHubModule
-                                selectedStationId={evSelectedStationId}
-                                onSelectStation={(id) => setEvSelectedStationId(id)}
-                                onGoEvOps={(id) => goEvOps(id)}
-                                onGoKpiAnalytics={() => { setKpiView('dashboard'); setMainModule('kpi'); }}
-                                                                onGoKpiEvOps={(id) => { if (id) setEvSelectedStationId(id); setKpiView('ev'); setMainModule('kpi'); }}
-                                onGoProjects={() => setMainModule('projects')}
-                            />
-                        )}
+                        {mainModule === 'projects' && <ProjectsModule />}
+                        {mainModule === 'evops' && <EvOpsModule onGoProjects={() => setMainModule('projects')} />}
 
 
                         {mainModule === 'kpi' && (
                             <div>
                                 {/* KPI Sub-navigation */}
-                                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-6">
-                                    <div className="text-sm text-gray-400">
-                                        Contexto EV: <span className="text-white font-semibold">{selectedEVStation?.name || '—'}</span>
-                                        <span className="text-gray-500"> · Conector: </span><span className="text-white font-semibold">{evSelectedConnectorId || '—'}</span>
-                                    </div>
-                                    <div className="flex flex-wrap gap-2">
-                                        <button
-                                            onClick={() => setKpiView('ev')}
-                                            className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${kpiView === 'ev' ? 'bg-yellow-700 text-white' : 'bg-gray-800 border border-gray-700 text-white hover:bg-gray-700'}`}
-                                        >
-                                            ⚡ KPIs EV
-                                        </button>
-                                        <button
-                                            onClick={() => setKpiView('dashboard')}
-                                            className={`px-4 py-2 rounded-lg text-sm font-semibold transition ${kpiView !== 'ev' ? 'bg-purple-700 text-white' : 'bg-gray-800 border border-gray-700 text-white hover:bg-gray-700'}`}
-                                        >
-                                            🏢 KPI Empresa
-                                        </button>
-                                        <button
-                                            onClick={() => goEvOps(evSelectedStationId)}
-                                            className="px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded-lg text-sm font-semibold hover:bg-gray-800 transition"
-                                        >
-                                            ⚡ EV Ops
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {kpiView === 'ev' && (
-                                    <div>
-                                        <div className="flex justify-between items-center mb-6">
-                                            <h2 className="text-2xl font-bold text-white">⚡ KPIs EV — Operación de carga</h2>
-                                            <div className="flex flex-wrap gap-2">
-    <button
-        onClick={() => exportEVKPIsAsJSON(evK)}
-        className="px-4 py-2 bg-blue-800 hover:bg-blue-900 text-white rounded-lg text-sm font-semibold transition"
-    >
-        ⤓ KPIs JSON
-    </button>
-    <button
-        onClick={() => exportEVKPIsAsCSV(evStations, evK)}
-        className="px-4 py-2 bg-blue-800 hover:bg-blue-900 text-white rounded-lg text-sm font-semibold transition"
-    >
-        ⤓ KPIs CSV
-    </button>
-    <button
-        onClick={() => exportEVAsJSON(evStations, evSelectedStationId)}
-        className="px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded-lg text-sm font-semibold hover:bg-gray-800 transition"
-    >
-        ⤓ Datos JSON
-    </button>
-    <button
-        onClick={() => exportEVAsCSV(evStations, evSelectedStationId)}
-        className="px-4 py-2 bg-gray-900 border border-gray-700 text-white rounded-lg text-sm font-semibold hover:bg-gray-800 transition"
-    >
-        ⤓ Datos CSV / Excel
-    </button>
-    <button
-        onClick={() => goEvOps(evSelectedStationId)}
-        className="px-4 py-2 bg-yellow-700 text-white rounded-lg text-sm font-semibold hover:bg-yellow-800 transition"
-    >
-        ⚡ Volver EV Ops
-    </button>
-</div>
-                                        </div>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-6 gap-3 mb-4">
-    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-        <div className="text-xs text-gray-400 mb-1">Estaciones</div>
-        <div className="text-2xl font-bold text-white">{evK.total}</div>
-        <div className="text-xs text-gray-500 mt-1">alcance actual</div>
-    </div>
-    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-        <div className="text-xs text-gray-400 mb-1">Disponibilidad</div>
-        <div className="text-2xl font-bold text-white">{evK.availabilityPct.toFixed(1)}%</div>
-        <div className="text-xs text-gray-500 mt-1">{evK.available} disponibles</div>
-    </div>
-    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-        <div className="text-xs text-gray-400 mb-1">Ocupadas</div>
-        <div className="text-2xl font-bold text-white">{evK.occupied}</div>
-        <div className="text-xs text-gray-500 mt-1">{evK.busyPct.toFixed(0)}% en uso</div>
-    </div>
-    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-        <div className="text-xs text-gray-400 mb-1">En cola</div>
-        <div className="text-2xl font-bold text-white">{evK.queued}</div>
-        <div className="text-xs text-gray-500 mt-1">cola total: {evK.queueTotal}</div>
-    </div>
-    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-        <div className="text-xs text-gray-400 mb-1">Offline</div>
-        <div className="text-2xl font-bold text-white">{evK.offline}</div>
-        <div className="text-xs text-gray-500 mt-1">puntos fuera de línea</div>
-    </div>
-    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-        <div className="text-xs text-gray-400 mb-1">Utilización potencia</div>
-        <div className="text-2xl font-bold text-white">{evK.utilizationPowerPct.toFixed(0)}%</div>
-        <div className="text-xs text-gray-500 mt-1">{evK.utilizedKW.toFixed(0)} / {evK.nominalKW.toFixed(0)} kW</div>
-    </div>
-</div>
-
-<div className="grid grid-cols-1 md:grid-cols-6 gap-3 mb-6">
-    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-        <div className="text-xs text-gray-400 mb-1">Ocupación prom.</div>
-        <div className="text-2xl font-bold text-white">{evK.avgOcc.toFixed(0)}%</div>
-        <div className="text-xs text-gray-500 mt-1">todas las estaciones</div>
-    </div>
-    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-        <div className="text-xs text-gray-400 mb-1">Ocupación prom. (busy)</div>
-        <div className="text-2xl font-bold text-white">{evK.avgOccBusy.toFixed(0)}%</div>
-        <div className="text-xs text-gray-500 mt-1">solo ocupadas/cola</div>
-    </div>
-    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-        <div className="text-xs text-gray-400 mb-1">Ocupación P95</div>
-        <div className="text-2xl font-bold text-white">{evK.occP95.toFixed(0)}%</div>
-        <div className="text-xs text-gray-500 mt-1">pico típico</div>
-    </div>
-    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-        <div className="text-xs text-gray-400 mb-1">Cola prom.</div>
-        <div className="text-2xl font-bold text-white">{evK.avgQueue.toFixed(1)}</div>
-        <div className="text-xs text-gray-500 mt-1">personas/vehículos</div>
-    </div>
-    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-        <div className="text-xs text-gray-400 mb-1">Cola P95</div>
-        <div className="text-2xl font-bold text-white">{evK.queueP95.toFixed(1)}</div>
-        <div className="text-xs text-gray-500 mt-1">cola alta</div>
-    </div>
-    <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-        <div className="text-xs text-gray-400 mb-1">Potencia nominal</div>
-        <div className="text-2xl font-bold text-white">{evK.nominalKW.toFixed(0)} kW</div>
-        <div className="text-xs text-gray-500 mt-1">∑ powerKW</div>
-    </div>
-</div>
-
-<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-    <div className="bg-gray-900 rounded-lg p-5 border border-gray-700">
-        <div className="flex items-center justify-between mb-3">
-            <h3 className="text-lg font-bold text-white">🚦 Top congestión</h3>
-            <div className="text-xs text-gray-400">por cola</div>
-        </div>
-        <div className="space-y-2">
-            {evK.topCongestion.map((s, i) => (
-                <div key={s.id} className="flex items-center justify-between bg-gray-950/40 border border-gray-800 rounded-lg px-3 py-2">
-                    <div className="min-w-0">
-                        <div className="text-sm text-white font-semibold truncate">{i+1}. {s.name}</div>
-                        <div className="text-xs text-gray-400 truncate">{s.comuna} · {s.status}</div>
-                    </div>
-                    <div className="text-right ml-3">
-                        <div className="text-sm text-white font-bold">cola {s.queue}</div>
-                        <div className="text-xs text-gray-400">{s.occupancy.toFixed(0)}% · {s.powerKW.toFixed(0)} kW</div>
-                    </div>
-                </div>
-            ))}
-        </div>
-    </div>
-
-    <div className="bg-gray-900 rounded-lg p-5 border border-gray-700">
-        <div className="flex items-center justify-between mb-3">
-            <h3 className="text-lg font-bold text-white">🗺️ Distribución por comuna</h3>
-            <div className="text-xs text-gray-400">top 6</div>
-        </div>
-        <div className="space-y-2">
-            {evK.byComuna.slice(0,6).map((c) => (
-                <div key={c.comuna} className="flex items-center justify-between bg-gray-950/40 border border-gray-800 rounded-lg px-3 py-2">
-                    <div className="text-sm text-white font-semibold truncate">{c.comuna}</div>
-                    <div className="text-right ml-3">
-                        <div className="text-sm text-white font-bold">{c.total} pts</div>
-                        <div className="text-xs text-gray-400">{c.availabilityPct.toFixed(0)}% disp · cola {c.avgQueue.toFixed(1)}</div>
-                    </div>
-                </div>
-            ))}
-        </div>
-        {evK.byConnector.length > 0 && (
-            <div className="mt-4 pt-3 border-t border-gray-800">
-                <div className="text-xs text-gray-400 mb-2">Conectores (conteo)</div>
-                <div className="flex flex-wrap gap-2">
-                    {evK.byConnector.map(x => (
-                        <span key={x.connector} className="px-2 py-1 text-xs bg-gray-800 border border-gray-700 text-white rounded-lg">
-                            {x.connector}: {x.count}
-                        </span>
-                    ))}
-                </div>
-            </div>
-        )}
-    </div>
-</div>
-
-<div className="bg-gray-900 rounded-lg p-6 border border-gray-700">
-                                            <h3 className="text-lg font-bold text-white mb-2">Formatos de salida (lo que el operador se lleva)</h3>
-                                            <div className="text-sm text-gray-300 leading-relaxed">
-                                                • <span className="font-semibold text-white">API JSON</span> para apps y mapas (estado, cola, fallas, energía).<br/>
-                                                • <span className="font-semibold text-white">Eventos</span> (webhooks / bus) para alertas y automatización operacional.<br/>
-                                                • <span className="font-semibold text-white">CSV/Excel</span> para continuidad (y sacar Excel de a poco, sin trauma).<br/>
-                                                • <span className="font-semibold text-white">PDF</span> para comité/gerencia con KPIs y trazabilidad de tickets.
-                                            </div>
-                                            <div className="text-xs text-gray-500 mt-3">
-                                                Nota: esta versión usa datos <span className="font-semibold">SIMULATED</span>. En piloto se conecta al backend/CSMS (OCPP/API) sin tocar cada cargador, salvo casos especiales.
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-
                                 {kpiView === 'dashboard' && (
                                     <div>
                                         <div className="flex justify-between items-center mb-6">
@@ -4471,620 +3567,7 @@ return (
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<SynapsisDashboard />);
         
-        console.log('🟢 ===== PROTOCOLO SINAPSIS v0.9 COMPLETE INICIADO =====');
+        console.log('🟢 ===== PROTOCOLO SINAPSIS v0.8 COMPLETE INICIADO =====');
     </script>
-
-
-
-
-<div id="sinapsisPrintReport">
-  <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-end;flex-wrap:wrap">
-    <div>
-      <h1><span class="brandA">Activa</span> <span class="brandC">Consultores</span></h1>
-      <div class="muted">Protocolo Sinapsis v0.9.1 (EV Ops) · Reporte comité (PDF)</div>
-    </div>
-    <div class="muted" id="spr_meta"></div>
-  </div>
-
-  <div style="margin-top:10px">
-    <div style="font-weight:900" id="spr_scope"></div>
-    <div class="muted" id="spr_ticket"></div>
-  </div>
-
-  <div class="grid" id="spr_kpis"></div>
-
-  <div style="margin-top:14px">
-    <div class="sectionTitle" id="spr_detail_title">Detalle por estación</div>
-    <div class="muted" id="spr_detail_hint" style="margin-top:2px">Ordenado por criticidad (offline → cola → ocupación).</div>
-    <div class="stationTable" id="spr_stations"></div>
-  </div>
-
-
-  <div style="margin-top:14px" class="muted">
-    Nota: datos simulados (sin datos personales). En piloto real: integración vía backend / OCPP / APIs.
-  </div>
-</div>
-
-
-<script>
-(function(){
-  function markNoPrint(){
-    // mark all direct children as no-print except the print report
-    Array.from(document.body.children).forEach(el=>{
-      if (el && el.id !== "sinapsisPrintReport") el.classList.add("no-print");
-    });
-  }
-  document.addEventListener("DOMContentLoaded", markNoPrint);
-})();
-</script>
-
-
-
-
-
-
-
-
-<script>
-/* --- EV Data Hub v5: KPI fix (ocupación) + export esquema (kpis+stations) + PDF comité (v0.9.1) --- */
-(function () {
-  const QS = new URLSearchParams(location.search);
-  const state = window.__sinapsisEVState = window.__sinapsisEVState || {
-    scope: QS.get("scope") || "city",          // "city" | "station"
-    station: QS.get("station") || null        // "ev-scl-06" etc
-  };
-
-  const SEEDED_STATIONS = [{"id": "ev-scl-01", "name": "Red EV - SCL 01", "comuna": "Las Condes", "address": "Punto 01, Las Condes, Santiago", "lat": -33.404654, "lng": -70.58125, "powerKW": 50, "status": "queue", "queue": 5, "occupancy": 69, "connectors": ["CCS2"]}, {"id": "ev-scl-02", "name": "Red EV - SCL 02", "comuna": "Providencia", "address": "Punto 02, Providencia, Santiago", "lat": -33.427325, "lng": -70.610699, "powerKW": 150, "status": "occupied", "queue": 0, "occupancy": 61, "connectors": ["Type2", "CCS2"]}, {"id": "ev-scl-03", "name": "Red EV - SCL 03", "comuna": "Santiago Centro", "address": "Punto 03, Santiago Centro, Santiago", "lat": -33.448237, "lng": -70.663189, "powerKW": 150, "status": "offline", "queue": 0, "occupancy": 12, "connectors": ["Type2"]}, {"id": "ev-scl-04", "name": "Red EV - SCL 04", "comuna": "Ñuñoa", "address": "Punto 04, Ñuñoa, Santiago", "lat": -33.45453, "lng": -70.591519, "powerKW": 50, "status": "queue", "queue": 4, "occupancy": 74, "connectors": ["Type2", "CCS2"]}, {"id": "ev-scl-05", "name": "Red EV - SCL 05", "comuna": "La Reina", "address": "Punto 05, La Reina, Santiago", "lat": -33.440858, "lng": -70.531717, "powerKW": 50, "status": "occupied", "queue": 0, "occupancy": 94, "connectors": ["Type2", "CCS2"]}, {"id": "ev-scl-06", "name": "Red EV - SCL 06", "comuna": "Maipú", "address": "Punto 06, Maipú, Santiago", "lat": -33.512834, "lng": -70.766336, "powerKW": 22, "status": "queue", "queue": 1, "occupancy": 81, "connectors": ["Type2", "CCS2"]}, {"id": "ev-scl-07", "name": "Red EV - SCL 07", "comuna": "Puente Alto", "address": "Punto 07, Puente Alto, Santiago", "lat": -33.620679, "lng": -70.564575, "powerKW": 100, "status": "offline", "queue": 0, "occupancy": 2, "connectors": ["Type2"]}, {"id": "ev-scl-08", "name": "Red EV - SCL 08", "comuna": "La Florida", "address": "Punto 08, La Florida, Santiago", "lat": -33.538645, "lng": -70.573644, "powerKW": 150, "status": "queue", "queue": 3, "occupancy": 79, "connectors": ["CHAdeMO", "CCS2"]}, {"id": "ev-scl-09", "name": "Red EV - SCL 09", "comuna": "Estación Central", "address": "Punto 09, Estación Central, Santiago", "lat": -33.458144, "lng": -70.693863, "powerKW": 50, "status": "offline", "queue": 0, "occupancy": 3, "connectors": ["CHAdeMO", "CCS2"]}, {"id": "ev-scl-10", "name": "Red EV - SCL 10", "comuna": "Quilicura", "address": "Punto 10, Quilicura, Santiago", "lat": -33.343355, "lng": -70.70934, "powerKW": 60, "status": "offline", "queue": 0, "occupancy": 16, "connectors": ["Type2", "CCS2"]}, {"id": "ev-scl-11", "name": "Red EV - SCL 11", "comuna": "Las Condes", "address": "Punto 11, Las Condes, Santiago", "lat": -33.404744, "lng": -70.571055, "powerKW": 50, "status": "available", "queue": 0, "occupancy": 0, "connectors": ["CHAdeMO", "CCS2"]}, {"id": "ev-scl-12", "name": "Red EV - SCL 12", "comuna": "Providencia", "address": "Punto 12, Providencia, Santiago", "lat": -33.428156, "lng": -70.610494, "powerKW": 50, "status": "offline", "queue": 0, "occupancy": 3, "connectors": ["CCS2"]}, {"id": "ev-scl-13", "name": "Red EV - SCL 13", "comuna": "Santiago Centro", "address": "Punto 13, Santiago Centro, Santiago", "lat": -33.445078, "lng": -70.654616, "powerKW": 50, "status": "queue", "queue": 3, "occupancy": 77, "connectors": ["CHAdeMO", "CCS2"]}, {"id": "ev-scl-14", "name": "Red EV - SCL 14", "comuna": "Ñuñoa", "address": "Punto 14, Ñuñoa, Santiago", "lat": -33.447772, "lng": -70.58972, "powerKW": 22, "status": "occupied", "queue": 0, "occupancy": 74, "connectors": ["CHAdeMO", "CCS2"]}, {"id": "ev-scl-15", "name": "Red EV - SCL 15", "comuna": "La Reina", "address": "Punto 15, La Reina, Santiago", "lat": -33.445372, "lng": -70.554014, "powerKW": 50, "status": "occupied", "queue": 0, "occupancy": 77, "connectors": ["Type2", "CCS2"]}, {"id": "ev-scl-16", "name": "Red EV - SCL 16", "comuna": "Maipú", "address": "Punto 16, Maipú, Santiago", "lat": -33.511505, "lng": -70.743564, "powerKW": 50, "status": "occupied", "queue": 0, "occupancy": 78, "connectors": ["CCS2"]}, {"id": "ev-scl-17", "name": "Red EV - SCL 17", "comuna": "Puente Alto", "address": "Punto 17, Puente Alto, Santiago", "lat": -33.60512, "lng": -70.573831, "powerKW": 150, "status": "occupied", "queue": 0, "occupancy": 60, "connectors": ["Type2", "CCS2"]}, {"id": "ev-scl-18", "name": "Red EV - SCL 18", "comuna": "La Florida", "address": "Punto 18, La Florida, Santiago", "lat": -33.553312, "lng": -70.55508, "powerKW": 100, "status": "available", "queue": 0, "occupancy": 0, "connectors": ["Type2"]}, {"id": "ev-scl-19", "name": "Red EV - SCL 19", "comuna": "Estación Central", "address": "Punto 19, Estación Central, Santiago", "lat": -33.453861, "lng": -70.689167, "powerKW": 50, "status": "occupied", "queue": 0, "occupancy": 76, "connectors": ["Type2", "CCS2"]}, {"id": "ev-scl-20", "name": "Red EV - SCL 20", "comuna": "Quilicura", "address": "Punto 20, Quilicura, Santiago", "lat": -33.352686, "lng": -70.723457, "powerKW": 150, "status": "queue", "queue": 5, "occupancy": 76, "connectors": ["CHAdeMO", "CCS2"]}];
-
-  function $(sel, root=document){ return root.querySelector(sel); }
-  function $all(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
-
-  // Demo tickets
-  const TKEY = "sinapsisTickets_v1";
-  function loadTickets(){ try { return JSON.parse(localStorage.getItem(TKEY) || "{}"); } catch { return {}; } }
-  function saveTickets(obj){ localStorage.setItem(TKEY, JSON.stringify(obj)); }
-  function openTicket(stId){
-    if (!stId) return null;
-    const t = loadTickets();
-    t[stId] = {
-      ticket_open: true,
-      ticket_id: "TK-" + Date.now(),
-      ticket_status: "open",
-      ticket_type: "incidente_operacional",
-      created_at: new Date().toISOString()
-    };
-    saveTickets(t);
-    return t[stId];
-  }
-  function getTicket(stId){ const t = loadTickets(); return stId ? (t[stId] || null) : null; }
-
-  function syncURL(){
-    const url = new URL(location.href);
-    url.searchParams.set("scope", state.scope);
-    if (state.station) url.searchParams.set("station", state.station);
-    else url.searchParams.delete("station");
-    history.replaceState(null, "", url.toString());
-  }
-
-  function getHubRoot(){
-    return document.getElementById("ev-data-hub") || document.querySelector("[data-ev-data-hub]");
-  }
-
-  function buildCatalog(){
-    const m = new Map();
-    // Prefer seeded stations from demo exports (20)
-    if (Array.isArray(SEEDED_STATIONS) && SEEDED_STATIONS.length) {
-      SEEDED_STATIONS.forEach(s=>{
-        if (!s.id) return;
-        m.set(s.id, {
-          id: s.id,
-          name: s.name || s.id,
-          comuna: s.comuna || null,
-          address: s.address || null,
-          lat: s.lat ?? null,
-          lng: s.lng ?? null,
-          powerKW: s.powerKW ?? null,
-          status: s.status || "available",
-          queue: s.queue ?? 0,
-          occupancy: s.occupancy ?? 0,
-          connectors: s.connectors || []
-        });
-      });
-      return m;
-    }
-    // Minimal fallback
-    [["ev-scl-06","Red EV - SCL 06","Maipú"],["ev-scl-01","Red EV - SCL 01","Las Condes"]].forEach(([id,name,comuna])=>{
-      m.set(id, {id,name,comuna,address:null,lat:null,lng:null,powerKW:22,status:"available",queue:0,occupancy:0,connectors:[]});
-    });
-    return m;
-  }
-
-  function ensureControls(){
-    const hub = getHubRoot();
-    if (!hub) return;
-    if (hub.querySelector("[data-ev-scope-controls]")) return;
-
-    const controls = document.createElement("div");
-    controls.setAttribute("data-ev-scope-controls","1");
-    controls.style.display="flex";
-    controls.style.gap="10px";
-    controls.style.flexWrap="wrap";
-    controls.style.alignItems="center";
-    controls.style.margin="10px 0 12px 0";
-
-    controls.innerHTML = `
-      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
-        <div style="font-weight:800;opacity:.9">Vista</div>
-        <button type="button" class="btn" data-scope="city">Ciudad</button>
-        <button type="button" class="btn" data-scope="station">Estación</button>
-
-        <div style="display:flex;gap:8px;align-items:center;margin-left:10px">
-          <div style="font-weight:800;opacity:.9">Estación</div>
-          <select id="evStationSelect" class="mono" style="padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:#e8eefc;min-width:240px">
-            <option value="">(elige estación)</option>
-          </select>
-        </div>
-      </div>
-
-      <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
-        <button type="button" class="btn" id="btnExportJSON">Export JSON</button>
-        <button type="button" class="btn" id="btnExportCSV">Export CSV</button>
-        <button type="button" class="btn" id="btnPDF">PDF comité</button>
-      </div>
-    `;
-
-    const h2 = hub.querySelector("h2, h3") || hub.firstElementChild;
-    if (h2 && h2.parentElement === hub) h2.insertAdjacentElement("afterend", controls);
-    else hub.prepend(controls);
-
-    const catalog = buildCatalog();
-    const select = $("#evStationSelect", hub);
-
-    Array.from(catalog.values())
-      .sort((a,b)=>`${a.id}`.localeCompare(`${b.id}`))
-      .forEach(st=>{
-        const opt = document.createElement("option");
-        opt.value = st.id;
-        opt.textContent = `${st.id.toUpperCase()} · ${st.comuna || ""}`.trim();
-        select.appendChild(opt);
-      });
-
-    if (state.station && catalog.has(state.station)) select.value = state.station;
-
-    function highlight(){
-      $all("button[data-scope]", controls).forEach(b=>{
-        const scope = b.getAttribute("data-scope");
-        const active = (scope===state.scope);
-        b.style.outline = active ? "2px solid rgba(255,255,255,.25)" : "none";
-        b.classList.toggle("primary", active && scope==="city");
-        b.classList.toggle("orange", active && scope==="station");
-      });
-      select.style.borderColor = (state.scope==="station" && !state.station) ? "rgba(255,122,26,.55)" : "rgba(255,255,255,.12)";
-    }
-
-    controls.addEventListener("click",(e)=>{
-      const btn = e.target.closest("button[data-scope]");
-      if (!btn) return;
-      state.scope = btn.getAttribute("data-scope");
-      syncURL(); render(); highlight();
-    });
-    select.addEventListener("change",()=>{
-      state.station = select.value || null;
-      if (state.station) state.scope = "station";
-      syncURL(); render(); highlight();
-    });
-
-    $("#btnExportJSON", controls).addEventListener("click",()=>{
-      const payload = buildPayload();
-      download(JSON.stringify(payload, null, 2), exportName("kpis", "json"), "application/json");
-    });
-    $("#btnExportCSV", controls).addEventListener("click",()=>{
-      const payload = buildPayload();
-      download(toCSV(payload.stations || []), exportName("stations", "csv"), "text/csv;charset=utf-8");
-    });
-    $("#btnPDF", controls).addEventListener("click",()=>{
-      const payload = buildPayload();
-      fillPrint(payload);
-      window.print();
-    });
-
-    highlight();
-  }
-
-  function exportName(prefix, ext){
-    const scope = (state.scope==="station" && state.station) ? "station" : "city";
-    return `sinapsis-ev-${prefix}-${scope}.${ext}`;
-  }
-
-  function download(text, filename, mime){
-    const blob = new Blob([text], {type:mime});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url; a.download = filename;
-    document.body.appendChild(a); a.click(); a.remove();
-    URL.revokeObjectURL(url);
-  }
-
-  // --- KPI rules (fix) ---
-  function computeKpisForStation(st){
-    const status = (st.status || "").toLowerCase();
-    const occupancy = Number.isFinite(+st.occupancy) ? +st.occupancy : 0;
-    const queue = Number.isFinite(+st.queue) ? +st.queue : 0;
-    const power = Number.isFinite(+st.powerKW) ? +st.powerKW : 0;
-
-    const isOffline = status === "offline";
-    const isBusy = status === "occupied" || status === "queue";
-
-    return {
-      availability_pct: (status === "available") ? 100 : 0,
-      occupancy_pct: (isBusy ? occupancy : (status === "available" ? 0 : occupancy)),
-      offline_count: isOffline ? 1 : 0,
-      avg_queue: queue,
-      active_power_kw_est: (isBusy && power > 0) ? power : 0
-    };
-  }
-
-  function computeKpisCity(stations){
-    const n = stations.length || 1;
-    const avail = stations.map(s => (String(s.status||"").toLowerCase()==="available") ? 100 : 0);
-    const occ = stations.map(s => Number.isFinite(+s.occupancy) ? +s.occupancy : 0);
-    const off = stations.map(s => (String(s.status||"").toLowerCase()==="offline") ? 1 : 0);
-    const q = stations.map(s => Number.isFinite(+s.queue) ? +s.queue : 0);
-    const p = stations.map(s => {
-      const status = String(s.status||"").toLowerCase();
-      const busy = status==="occupied" || status==="queue";
-      const pw = Number.isFinite(+s.powerKW) ? +s.powerKW : 0;
-      return (busy && pw>0) ? pw : 0;
-    });
-
-    const avg = arr => Math.round((arr.reduce((a,x)=>a+x,0)/n)*10)/10;
-
-    return {
-      availability_pct: avg(avail),
-      occupancy_pct: avg(occ),
-      offline_count: off.reduce((a,x)=>a+x,0),
-      avg_queue: avg(q),
-      active_power_kw_est: Math.round(p.reduce((a,x)=>a+x,0))
-    };
-  }
-
-  function buildPayload(){
-    const catalog = buildCatalog();
-    const now = new Date().toISOString();
-    const scope = (state.scope==="station" && state.station) ? "station" : "city";
-    const selected_station_id = (scope==="station") ? state.station : null;
-
-    // Stations list
-    let stations = [];
-    if (scope === "station") {
-      const st = catalog.get(state.station);
-      if (st) stations = [st];
-    } else {
-      stations = Array.from(catalog.values());
-    }
-
-    // Attach ticket fields into stations (optional, demo)
-    stations = stations.map(s => {
-      const t = getTicket(s.id);
-      return {
-        ...s,
-        lastUpdate: s.lastUpdate || now,
-        source: s.source || "SIMULATED",
-        ticket_open: !!t?.ticket_open,
-        ticket_id: t?.ticket_id || null,
-        ticket_status: t?.ticket_status || null,
-        ticket_type: t?.ticket_type || null,
-        ticket_created_at: t?.created_at || null
-      };
-    });
-
-    const kpis = (scope==="station" && stations[0]) ? computeKpisForStation(stations[0]) : computeKpisCity(stations);
-
-    return {
-      platform: "Protocolo Sinapsis v0.9.1 (EV Ops)",
-      generated_at: now,
-      scope,
-      selected_station_id,
-      kpis,
-      stations
-    };
-  }
-
-  function toCSV(stations){
-    const headers = ["id","name","comuna","address","status","powerKW","occupancy","queue","lastUpdate","lat","lng","ticket_open","ticket_id","ticket_status","ticket_type","ticket_created_at"];
-    const esc = (v)=>{ if (v===null||v===undefined) return ""; const s=String(v).replace(/"/g,'""'); return /[",\n]/.test(s) ? `"${s}"` : s; };
-    const lines = [headers.join(",")];
-    (stations||[]).forEach(r=>{
-      lines.push(headers.map(h=>esc(r[h])).join(","));
-    });
-    return lines.join("\n");
-  }
-
-  function render(){
-    const hub = getHubRoot();
-    if (!hub) return;
-
-    let box = hub.querySelector("[data-ev-kpi-box]");
-    if (!box) {
-      box = document.createElement("div");
-      box.setAttribute("data-ev-kpi-box","1");
-      box.style.marginTop="10px";
-      hub.appendChild(box);
-    }
-
-    const payload = buildPayload();
-    const title = payload.scope === "station"
-      ? (payload.stations[0] ? `Estación: ${payload.stations[0].id.toUpperCase()} · ${payload.stations[0].comuna || ""}` : "Estación")
-      : "Ciudad: vista general";
-
-    const t = (payload.scope==="station" && payload.stations[0]) ? getTicket(payload.stations[0].id) : null;
-    const ticketLine = t ? `Ticket: ${t.ticket_id} · ${t.ticket_status} · ${t.ticket_type}` : "";
-
-    box.innerHTML = `
-      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:flex-end">
-        <div style="font-weight:900;font-size:14px">${title}</div>
-        <div style="color:rgba(255,255,255,.65);font-size:12px">SIMULATED · Sin PII · Integración: backend / OCPP / APIs</div>
-      </div>
-      ${ticketLine ? `<div style="margin-top:6px;color:rgba(255,255,255,.75);font-size:12px;font-weight:800">${ticketLine}</div>` : ``}
-      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px">
-        ${kpiCard("Disponibilidad", payload.kpis.availability_pct + "%")}
-        ${kpiCard("Ocupación", payload.kpis.occupancy_pct + "%")}
-        ${kpiCard("Cola prom.", payload.kpis.avg_queue)}
-        ${kpiCard("Offline", payload.kpis.offline_count)}
-        ${kpiCard("Potencia activa", payload.kpis.active_power_kw_est + " kW")}
-      </div>
-    `;
-  }
-
-  function fillPrint(payload){
-    const meta = document.getElementById("spr_meta");
-    if (meta) meta.textContent = new Date(payload.generated_at).toLocaleString();
-
-    const scopeEl = document.getElementById("spr_scope");
-    const ticketEl = document.getElementById("spr_ticket");
-    const kpiBox = document.getElementById("spr_kpis");
-
-    const detailTitle = document.getElementById("spr_detail_title");
-    const detailHint = document.getElementById("spr_detail_hint");
-    const stationsBox = document.getElementById("spr_stations");
-
-    const isStation = payload.scope === "station" && payload.stations && payload.stations[0];
-
-    if (isStation) {
-      const st = payload.stations[0];
-      if (scopeEl) scopeEl.textContent = `Estación: ${st.id.toUpperCase()} · ${st.comuna || ""}`;
-      const t = getTicket(st.id);
-      if (ticketEl) ticketEl.textContent = t ? `Ticket ${t.ticket_id} · ${t.ticket_status} · ${t.ticket_type} · ${t.created_at}` : "Sin ticket activo";
-      if (detailTitle) detailTitle.style.display = "none";
-      if (detailHint) detailHint.style.display = "none";
-      if (stationsBox) stationsBox.style.display = "none";
-    } else {
-      if (scopeEl) scopeEl.textContent = "Ciudad: vista general";
-      if (ticketEl) ticketEl.textContent = "Resumen + detalle (todas las estaciones)";
-      if (detailTitle) detailTitle.style.display = "block";
-      if (detailHint) detailHint.style.display = "block";
-      if (stationsBox) stationsBox.style.display = "block";
-    }
-
-    if (kpiBox) {
-      kpiBox.innerHTML = `
-        <div class="kpi"><div class="t">Disponibilidad</div><div class="v">${payload.kpis.availability_pct}%</div></div>
-        <div class="kpi"><div class="t">Ocupación</div><div class="v">${payload.kpis.occupancy_pct}%</div></div>
-        <div class="kpi"><div class="t">Cola prom.</div><div class="v">${payload.kpis.avg_queue}</div></div>
-        <div class="kpi"><div class="t">Offline</div><div class="v">${payload.kpis.offline_count}</div></div>
-        <div class="kpi"><div class="t">Potencia activa</div><div class="v">${payload.kpis.active_power_kw_est} kW</div></div>
-      `;
-
-    // ---- Ciudad detallada: agrega tabla por estación al PDF (paginable) ----
-    try{
-      const report = document.getElementById("sinapsisPrintReport");
-      if (report){
-        // Limpia detalle previo
-        const prev = report.querySelector("[data-spr-detail]");
-        if (prev) prev.remove();
-
-        if (!(payload.scope === "station")){
-          const wrap = document.createElement("div");
-          wrap.setAttribute("data-spr-detail","1");
-          wrap.innerHTML = buildDetailTableHTML(payload.stations || []);
-          report.appendChild(wrap);
-        }
-      }
-    }catch(err){ console.error(err); }
-    }
-
-    // City detailed list
-    if (!isStation && stationsBox) {
-      const stations = Array.isArray(payload.stations) ? payload.stations.slice() : [];
-
-      // Criticidad: offline (1) > cola (queue) > ocupación
-      function toNum(x){ return Number.isFinite(+x) ? +x : 0; }
-      function statusRank(s){
-        s = String(s||"").toLowerCase();
-        if (s === "offline") return 3;
-        if (s === "queue") return 2;
-        if (s === "occupied") return 1;
-        return 0; // available
-      }
-
-      stations.sort((a,b)=>{
-        const ra = statusRank(a.status), rb = statusRank(b.status);
-        if (rb !== ra) return rb - ra;
-        const qa = toNum(a.queue), qb = toNum(b.queue);
-        if (qb !== qa) return qb - qa;
-        const oa = toNum(a.occupancy), ob = toNum(b.occupancy);
-        if (ob !== oa) return ob - oa;
-        return String(a.id||"").localeCompare(String(b.id||""), "es");
-      });
-
-      const badgeClass = (s)=>{
-        s = String(s||"").toLowerCase();
-        if (s === "offline") return "badge b-offline";
-        if (s === "queue") return "badge b-queue";
-        if (s === "occupied") return "badge b-occupied";
-        return "badge b-available";
-      };
-
-      const head = `
-        <div class="row head">
-          <div class="cell">Estación</div>
-          <div class="cell">Comuna</div>
-          <div class="cell">Estado</div>
-          <div class="cell small">Cola</div>
-          <div class="cell small">Ocup.</div>
-          <div class="cell small">kW</div>
-        </div>
-      `;
-
-      const rows = stations.map(st=>{
-        const id = (st.id||"").toUpperCase();
-        const comuna = st.comuna || "";
-        const estado = String(st.status||"available").toLowerCase();
-        const q = toNum(st.queue);
-        const occ = toNum(st.occupancy);
-        const pw = toNum(st.powerKW);
-        return `
-          <div class="row">
-            <div class="cell">${id}</div>
-            <div class="cell">${comuna}</div>
-            <div class="cell"><span class="${badgeClass(estado)}">${estado}</span></div>
-            <div class="cell small">${q}</div>
-            <div class="cell small">${occ}%</div>
-            <div class="cell small">${pw}</div>
-          </div>
-        `;
-      }).join("");
-
-      stationsBox.innerHTML = head + rows;
-    }
-  }
-
-  // Hook: crear ticket en estación 06 -> ev-scl-06
-  function hookTicket(){
-    document.addEventListener("click",(e)=>{
-      const el = e.target.closest("button, a");
-      if (!el) return;
-      const txt = (el.textContent||"").trim().toLowerCase();
-      const isCreate = txt.includes("ticket") && (txt.includes("crear") || txt.includes("create"));
-      if (!isCreate) return;
-
-      const ctx = el.closest("[data-station-id]") || el.closest(".station") || el.closest(".card");
-      let id = null;
-      if (ctx && ctx.getAttribute) id = (ctx.getAttribute("data-station-id")||"").trim() || null;
-
-      if (!id && ctx) {
-        const t = (ctx.textContent||"");
-        const m = t.match(/Estaci[oó]n\s*0?(\d+)/i);
-        if (m) id = `ev-scl-${m[1].padStart(2,"0")}`;
-      }
-
-      if (id) {
-        openTicket(id);
-        state.station = id;
-        state.scope = "station";
-        syncURL();
-        render();
-      }
-    }, true);
-  }
-
-  
-  function patchLegacyExportPanel(){
-    // Busca el panel existente "Exportar datos" (JSON KPIs / CSV Estaciones) y le agrega PDF + wiring.
-    const buttons = Array.from(document.querySelectorAll("button"));
-    const btnJSON = buttons.find(b => (b.textContent||"").trim().toLowerCase() === "json kpis");
-    const btnCSV  = buttons.find(b => (b.textContent||"").trim().toLowerCase() === "csv estaciones");
-    if (!btnJSON || !btnCSV) return;
-
-    // Evita doble binding
-    if (btnJSON.dataset.sinapsisBound === "1") return;
-    btnJSON.dataset.sinapsisBound = "1";
-    btnCSV.dataset.sinapsisBound  = "1";
-
-    btnJSON.addEventListener("click", (e)=>{ e.preventDefault(); try{
-      const payload = buildPayload();
-      download(JSON.stringify(payload, null, 2), exportName("kpis", "json"), "application/json");
-    }catch(err){ console.error(err); }});
-
-    btnCSV.addEventListener("click", (e)=>{ e.preventDefault(); try{
-      const payload = buildPayload();
-      download(toCSV(payload.stations || []), exportName("stations", "csv"), "text/csv;charset=utf-8");
-    }catch(err){ console.error(err); }});
-
-    // Agrega PDF si no existe
-    const already = buttons.find(b => (b.textContent||"").toLowerCase().includes("pdf"));
-    if (already) return;
-
-    const btnPDF = document.createElement("button");
-    btnPDF.type = "button";
-    btnPDF.className = btnCSV.className || "btn";
-    btnPDF.textContent = "PDF comité";
-    btnPDF.style.marginLeft = "8px";
-    btnCSV.insertAdjacentElement("afterend", btnPDF);
-
-    btnPDF.addEventListener("click",(e)=>{ e.preventDefault(); try{
-      const payload = buildPayload();
-      fillPrint(payload);
-      window.print();
-    }catch(err){ console.error(err); }});
-  }
-
-  function buildDetailTableHTML(stations){
-    const rows = (stations||[]).slice().sort((a,b)=>{
-      const ao = String(a.status||"").toLowerCase()==="offline" ? 1:0;
-      const bo = String(b.status||"").toLowerCase()==="offline" ? 1:0;
-      if (bo!==ao) return bo-ao;
-      const bq = Number.isFinite(+b.queue)?+b.queue:0;
-      const aq = Number.isFinite(+a.queue)?+a.queue:0;
-      if (bq!==aq) return bq-aq;
-      const boc = Number.isFinite(+b.occupancy)?+b.occupancy:0;
-      const aoc = Number.isFinite(+a.occupancy)?+a.occupancy:0;
-      return boc-aoc;
-    });
-
-    const th = (t)=>`<th style="text-align:left;padding:8px 6px;border-bottom:1px solid rgba(0,0,0,.12);font-size:12px">${t}</th>`;
-    const td = (v)=>`<td style="padding:8px 6px;border-bottom:1px solid rgba(0,0,0,.08);font-size:12px">${v??""}</td>`;
-    const badge = (s)=>{
-      const st = String(s||"").toLowerCase();
-      const bg = st==="offline" ? "rgba(220,38,38,.12)" : (st==="queue" ? "rgba(245,158,11,.12)" : (st==="occupied" ? "rgba(99,102,241,.12)" : "rgba(16,185,129,.12)"));
-      const fg = st==="offline" ? "#b91c1c" : (st==="queue" ? "#92400e" : (st==="occupied" ? "#3730a3" : "#065f46"));
-      return `<span style="display:inline-block;padding:2px 8px;border-radius:999px;background:${bg};color:${fg};font-weight:800">${st||"—"}</span>`;
-    };
-
-    const trs = rows.map(r=>{
-      return `<tr style="break-inside:avoid;page-break-inside:avoid">
-        ${td(`<span style="font-weight:900">${(r.id||"").toUpperCase()}</span><div style="opacity:.7">${r.comuna||""}</div>`)}
-        ${td(badge(r.status))}
-        ${td(Number.isFinite(+r.queue)?+r.queue:0)}
-        ${td((Number.isFinite(+r.occupancy)?+r.occupancy:0) + "%")}
-        ${td((Number.isFinite(+r.powerKW)?+r.powerKW:0) + " kW")}
-      </tr>`;
-    }).join("");
-
-    return `
-      <div style="margin-top:14px">
-        <div style="font-weight:900;font-size:14px;margin-bottom:4px">Detalle por estación</div>
-        <div style="font-size:12px;opacity:.75;margin-bottom:8px">Ordenado por criticidad (offline → cola → ocupación).</div>
-        <table style="width:100%;border-collapse:collapse">
-          <thead><tr>
-            ${th("Estación")}
-            ${th("Estado")}
-            ${th("Cola")}
-            ${th("Ocupación")}
-            ${th("kW")}
-          </tr></thead>
-          <tbody>${trs}</tbody>
-        </table>
-      </div>
-    `;
-  }
-
-function init(){ ensureControls(); hookTicket(); patchLegacyExportPanel(); render(); }
-
-  document.addEventListener("DOMContentLoaded", init);
-  window.addEventListener("hashchange", init);
-})();
-</script>
-
 </body>
 </html>
